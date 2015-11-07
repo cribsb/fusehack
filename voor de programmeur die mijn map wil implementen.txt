@@ -1,0 +1,38 @@
+implement map.
+
+// assuming images are already loaded properly
+// and have fired onload events, which you've listened for
+// so that there are no surprises, when your engine tries to
+// paint something that isn't there, yet
+
+
+// this should all be wrapped in a module that deals with
+// loading tile-maps, selecting the tile to "paint" with,
+// and generating the data-format for the tile, for you to put into the array
+// (or accepting plug-in data-formatters, to do so)
+var selected_tile = null,
+    selected_tile_map = get_tile_map(), // this would be an image with your tiles
+    tile_width  = 64, // in image-pixels, not canvas/screen-pixels
+    tile_height = 64, // in image-pixels, not canvas/screen-pixels
+
+    num_tiles_x = selected_tile_map.width  / tile_width,
+    num_tiles_y = selected_tile_map.height / tile_height,
+
+    select_tile_num_from_map = function (map_px_X, map_px_Y) {
+        // there are *lots* of ways to do this, but keeping it simple
+        var tile_y = Math.floor(map_px_Y / tile_height), // 4 = floor(280/64)
+            tile_x = Math.floor(map_px_X / tile_width ),
+
+            tile_num = tile_y * num_tiles_x + tile_x;
+            // 23 = 4 down * 5 per row + 3 over
+
+        return tile_num;
+    };
+
+    // won't go into event-handling and coordinate-normalization
+    selected_tile_map.onclick = function (evt) {
+        // these are the coordinates of the click,
+        //as they relate to the actual image at full scale
+        map_x, map_y;
+        selected_tile = select_tile_num_from_map(map_x, map_y);
+    };
