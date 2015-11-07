@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="24" height="15" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="background" tilewidth="32" tileheight="32" tilecount="256">
+  <image source="tiles01.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="257" name="01" tilewidth="32" tileheight="32" tilecount="256">
+  <image source="../examples/assets/textures/tiles/tile_custom02.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="513" name="river" tilewidth="32" tileheight="32" tilecount="1">
+  <image source="../../../../Pictures/river.png" width="32" height="32"/>
+ </tileset>
+ <layer name="Tilelaag 1" width="24" height="15">
+  <data encoding="base64" compression="zlib">
+   eJy1lNkNwjAQRG2aML9ISHznaICjAY4GIDSAqQAqZ1bBYrQsxAlhpNHKK89zvIlSOedquIILuKS11Aiv4Y3qOZXhrCjAU8pKXcIrWjPzYvQ4w1nRQvb413PUlGelXjR6fKaVDcZckqLrVtee4N7n4icZ4EyFZ+W7CX+sM4LR+yd/TLbmW2z5PnLes2gPHz7wLfYNvvdgb+GdOuMbv48a+Aif4LPijzXzRrE1P81P11+U+Dw/XYeeMcO/Z+5bPs9PV7nzdYALsEv4ATKNJzA=
+  </data>
+ </layer>
+ <layer name="doorloopbaar" width="24" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo4CBgRGImYCYmUbmCwKxEBAL08h8RSBWAmJlGpk/CkbBQAAA6H8Aow==
+  </data>
+ </layer>
+</map>
