@@ -43,7 +43,7 @@ var self = this,
 				// Check if the engine started successfully
 				if (success) {
 
-ige.network.start('http://fuseh.herokuapps.com', function () {
+ige.network.start('http://fusehack.azurewebsites.net', function () {
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(60) // Render the simulation 160 milliseconds in the past
 							// Create a listener that will fire whenever an entity
