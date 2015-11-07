@@ -195,7 +195,7 @@ var Client = IgeClass.extend({
 					
 					// Add the box2d debug painter entity to the
 					// scene to show the box2d body outlines
-					//ige.box2d.enableDebug(self.objectLayer);
+					ige.box2d.enableDebug(self.objectLayer);
 				}
 			});
 		});

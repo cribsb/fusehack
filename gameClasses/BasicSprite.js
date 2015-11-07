@@ -1,3 +1,6 @@
+// Do not use!
+// @deprecated
+
 var BasicSprite = IgeEntity.extend({
 	classId:'BasicSprite',
 
