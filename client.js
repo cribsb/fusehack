@@ -1,455 +1,132 @@
 var Client = IgeClass.extend({
 	classId: 'Client',
+
 	init: function () {
-		
-		var self = this,
-		gameTexture = [];
-		//ige.input.debug(true);
-
-		// Setup the control system
-		ige.input.mapAction('walkLeft', ige.input.key.left);
-		ige.input.mapAction('walkRight', ige.input.key.right);
-		ige.input.mapAction('walkUp', ige.input.key.up);
-		ige.input.mapAction('walkDown', ige.input.key.down);
-
-		ige.addComponent(IgeEditorComponent);
+		//ige.timeScale(0.1);
+		ige.showStats(1);
 
 		// Load our textures
-		self.obj = [];
+		var self = this;
 
 		// Enable networking
 		ige.addComponent(IgeNetIoComponent);
 
-		// Load the fairy texture and store it in the gameTexture object
-		self.gameTexture = {};
-		var fair = self.gameTexture.fairy = new IgeTexture('./assets/textures/sprites/fairy.png');
+		// Implement our game methods
+		this.implement(ClientNetworkEvents);
 
-		// Add the playerComponent behaviour to the entity
-		//this.fair.addBehaviour('playerComponent_behaviour', this._behaviour);
+		// Create the HTML canvas
+		ige.createFrontBuffer(true);
 
-		// Load the tilemaps
-		gameTexture[0] = new IgeCellSheet('./assets/textures/tiles/tilea5b.png', 8, 16);
+		// Load the textures we want to use
+		this.textures = {
+			ship: new IgeTexture('./assets/PlayerTexture.js')
+		};
 
-		// Load a smart texture
-		self.gameTexture.simpleBox = new IgeTexture('./assets/textures/smartTextures/simpleBox.js');
-
-		// Listen for the key up event
-		ige.input.on('keyUp', function (event, keyCode) { self._keyUp(event, keyCode); });
-
-		// Wait for our textures to load before continuing
 		ige.on('texturesLoaded', function () {
-			// Create the HTML canvas
-			ige.createFrontBuffer(true);
-
-			// Start the engine
+			// Ask the engine to start
 			ige.start(function (success) {
 				// Check if the engine started successfully
 				if (success) {
+					// Start the networking (you can do this elsewhere if it
+					// makes sense to connect to the server later on rather
+					// than before the scene etc are created... maybe you want
+					// a splash screen or a menu first? Then connect after you've
+					// got a username or something?
+					ige.network.start('http://localhost:2000', function () {
+						// Setup the network command listeners
+						ige.network.define('playerEntity', self._onPlayerEntity); // Defined in ./gameClasses/ClientNetworkEvents.js
 
-					ige.network.start('http://37.34.61.80:' + process.env.PORT || 2000, function () {
+						// Setup the network stream handler
 						ige.network.addComponent(IgeStreamComponent)
-							.stream.renderLatency(60) // Render the simulation 160 milliseconds in the past
+							.stream.renderLatency(80) // Render the simulation 160 milliseconds in the past
 							// Create a listener that will fire whenever an entity
 							// is created because of the incoming stream data
 							.stream.on('entityCreated', function (entity) {
-								//console.log('Stream entity created with ID: ' + entity.id());
+								self.log('Stream entity created with ID: ' + entity.id());
+
 							});
 
+						self.mainScene = new IgeScene2d()
+							.id('mainScene');
 
-					// Load the base scene data
-					ige.addGraph('IgeBaseScene');
+						// Create the scene
+						self.scene1 = new IgeScene2d()
+							.id('scene1')
+							.mount(self.mainScene);
 
-					self.obj[0] = new IgeEntity()
-					.translateTo(-384 + 16, -240 + 16, 0)
-					.texture(fair)
-					.width(32)
-					.height(32)
-					.mount(ige.$('baseScene'))
-					//.addBehaviour('Client_behaviour', this._behaviour);
+						self.uiScene = new IgeScene2d()
+							.id('uiScene')
+							.ignoreCamera(true)
+							.mount(self.mainScene);
 
-					// Create the scene
-					self.scene1 = new IgeScene2d()
-					.id('scene1')
-					.translateTo(0, 0, 0)
-						//.drawBounds(true)
-						.mount(ige.$('baseScene'));
+						// Create the main viewport and set the scene
+						// it will "look" at as the new scene1 we just
+						// created above
+						self.vp1 = new IgeViewport()
+							.id('vp1')
+							.autoSize(true)
+							.scene(self.mainScene)
+							.drawBounds(false)
+							.mount(ige);
 
-					// Create the main viewport
-					self.vp2 = new IgeViewport()
-					.id('vp2')
-					.autoSize(true)
-					.scene(self.scene1)
-						//.drawBounds(true)
-						.mount(ige);
+						// Define our player controls
+						ige.input.mapAction('left', ige.input.key.left);
+						ige.input.mapAction('right', ige.input.key.right);
+						ige.input.mapAction('thrust', ige.input.key.up);
 
-					// Create the texture maps
-					self.textureMap1 = new IgeTextureMap()
-					.depth(0)
-					.tileWidth(32)
-					.tileHeight(32)
-					.gridSize(24, 15)
-						//.drawGrid(true)
-						.drawMouse(true)
-						.translateTo(-384, -240, 0)
-						.drawBounds(true)
-						.autoSection(8)
-						//.drawSectionBounds(true)
-						.mount(self.scene1);
+						// Ask the server to create an entity for us
+						ige.network.send('playerEntity');
 
-						self.textureMap1.addTexture(gameTexture[0]);
+						// We don't create any entities here because in this example the entities
+						// are created server-side and then streamed to the clients. If an entity
+						// is streamed to a client and the client doesn't have the entity in
+						// memory, the entity is automatically created. Woohoo!
 
-					// Paint some awesome pavement tiles randomly selecting
-					// the "un-cracked" or "cracked" cell of gameTexture[2]
-					// which are cells 22 and 86 respectively
-					var textureCell, x, y, texIndex;
-					for (x = 0; x < 24; x++) {
-						for (y = 0; y < 15; y++) {
-							textureCell = (Math.random() * 4) < 2 ? 22 : 86;
-							self.textureMap1.paintTile(x, y, 0, textureCell);
-						}
-					}
+						// Enable console logging of network messages but only show 10 of them and
+						// then stop logging them. This is a demo of how to help you debug network
+						// data messages.
+						ige.network.debugMax(10);
+						ige.network.debug(true);
 
-					console.log(self.textureMap1.map.mapDataString());
-				});
-			}
+
+
+						// Create an IgeUiTimeStream entity that will allow us to "visualise" the
+						// timestream data being interpolated by the player entity
+						//self.tsVis = new IgeUiTimeStream()
+							//.height(140)
+							//.width(400)
+							//.top(0)
+							//.center(0)
+							//.mount(self.uiScene);
+
+						self.custom1 = {
+							name: 'Delta',
+							value: 0
+						};
+
+						self.custom2 = {
+							name: 'Data Delta',
+							value: 0
+						};
+
+						self.custom3 = {
+							name: 'Offset Delta',
+							value: 0
+						};
+
+						self.custom4 = {
+							name: 'Interpolate Time',
+							value: 0
+						};
+
+						ige.watchStart(self.custom1);
+						ige.watchStart(self.custom2);
+						ige.watchStart(self.custom3);
+						ige.watchStart(self.custom4);
+					});
+				}
 			});
 		});
-	},
-
-	tick: function() {
-	},
-
-	_keyUp: function() {
-		console.log("4");
-		var vel = 6,
-		xVel, yVel,
-		direction = '',
-		iso = (this._parent && this._parent.isometricMounts() === true);
-
-		if (ige.input.actionState('walkUp')) {
-			direction += 'N';
-		}
-
-		if (ige.input.actionState('walkDown')) {
-			direction += 'S';
-		}
-
-		if (ige.input.actionState('walkLeft')) {
-			direction += 'W';
-		}
-
-		if (ige.input.actionState('walkRight')) {
-			direction += 'E';
-		}
-
-		switch (direction) {
-			case 'N':
-			if (iso) {
-				vel /= 1.4;
-				xVel = -vel;
-				yVel = -vel;
-			} else {
-				xVel = 0;
-				yVel = -vel;
-			}
-			this.imageEntity.animation.select('walkUp');
-			break;
-
-			case 'S':
-			if (iso) {
-				vel /= 1.4;
-				xVel = vel;
-				yVel = vel;
-			} else {
-				xVel = 0;
-				yVel = vel;
-			}
-			this._box2dBody.SetLinearVelocity(new IgePoint3d(0, vel, 0));
-			this._box2dBody.SetAwake(true);
-			this.imageEntity.animation.select('walkDown');
-			break;
-
-			case 'E':
-			if (iso) {
-				vel /= 2;
-				xVel = vel;
-				yVel = -vel;
-			} else {
-				xVel = vel;
-				yVel = 0;
-			}
-			this._box2dBody.SetLinearVelocity(new IgePoint3d(vel, 0, 0));
-			this._box2dBody.SetAwake(true);
-			this.imageEntity.animation.select('walkRight');
-			break;
-
-			case 'W':
-			if (iso) {
-				vel /= 2;
-				xVel = -vel;
-				yVel = vel;
-			} else {
-				xVel = -vel;
-				yVel = 0;
-			}
-			this._box2dBody.SetLinearVelocity(new IgePoint3d(-vel, 0, 0));
-			this._box2dBody.SetAwake(true);
-			this.imageEntity.animation.select('walkLeft');
-			break;
-
-			case 'NE':
-			if (iso) {
-				xVel = 0;
-				yVel = -vel;
-			} else {
-				xVel = vel;
-				yVel = -vel;
-			}
-			this._box2dBody.SetLinearVelocity(new IgePoint3d(vel, -vel, 0));
-			this._box2dBody.SetAwake(true);
-			this.imageEntity.animation.select('walkRight');
-			break;
-
-			case 'NW':
-			if (iso) {
-				xVel = -vel;
-				yVel = 0;
-			} else {
-				xVel = -vel;
-				yVel = -vel;
-			}
-			this._box2dBody.SetLinearVelocity(new IgePoint3d(-vel, -vel, 0));
-			this._box2dBody.SetAwake(true);
-			this.imageEntity.animation.select('walkLeft');
-			break;
-
-			case 'SE':
-			if (iso) {
-				xVel = vel;
-				yVel = 0;
-			} else {
-				xVel = vel;
-				yVel = vel;
-			}
-			this._box2dBody.SetLinearVelocity(new IgePoint3d(vel, vel, 0));
-			this._box2dBody.SetAwake(true);
-			this.imageEntity.animation.select('walkRight');
-			break;
-
-			case 'SW':
-			if (iso) {
-				xVel = 0;
-				yVel = vel;
-			} else {
-				xVel = -vel;
-				yVel = vel;
-			}
-			this._box2dBody.SetLinearVelocity(new IgePoint3d(-vel, vel, 0));
-			this._box2dBody.SetAwake(true);
-			this.imageEntity.animation.select('walkLeft');
-			break;
-
-			default:
-			this.imageEntity.animation.stop();
-			break;
-		}
-
-		this._box2dBody.SetLinearVelocity(new IgePoint3d(xVel, yVel, 0));
-		this._box2dBody.SetAwake(true);
-	},
-
-	/**
-	 * Tweens the character to the specified world co-ordinates.
-	 * @param x
-	 * @param y
-	 * @return {*}
-	 */
-	walkTo: function (x, y) {
-	 	var self = this,
-	 	distX = x - this.translate().x(),
-	 	distY = y - this.translate().y(),
-	 	distance = Math.distance(
-	 		this.translate().x(),
-	 		this.translate().y(),
-	 		x,
-	 		y
-	 		),
-	 	speed = 0.1,
-	 	time = (distance / speed);
-
-		// Set the animation based on direction
-		if (Math.abs(distX) > Math.abs(distY)) {
-			// Moving horizontal
-			if (distX < 0) {
-				// Moving left
-				//this.animation.select('walkLeft');
-			} else {
-				// Moving right
-				//this.animation.select('walkRight');
-			}
-		} else {
-			// Moving vertical
-			if (distY < 0) {
-				// Moving up
-				//this.animation.select('walkUp');
-			} else {
-				// Moving down
-				//this.animation.select('walkDown');
-			}
-		}
-
-		// Start tweening the little person to their destination
-		this._translate.tween()
-		.stopAll()
-		.properties({x: x, y: y})
-		.duration(time)
-		.afterTween(function () {
-			self.animation.stop();
-				// And you could make him reset back
-				// to his original animation frame with:
-				//self.cell(10);
-			})
-		.start();
-
-		return this;
-	},
-
-	_behaviour: function (ctx) {
-		var vel = 6,
-		xVel, yVel,
-		direction = '',
-		iso = (this._parent && this._parent.isometricMounts() === true);
-
-		if (ige.input.actionState('walkUp')) {
-			direction += 'N';
-		}
-
-		if (ige.input.actionState('walkDown')) {
-			direction += 'S';
-		}
-
-		if (ige.input.actionState('walkLeft')) {
-			direction += 'W';
-		}
-
-		if (ige.input.actionState('walkRight')) {
-			direction += 'E';
-		}
-
-		switch (direction) {
-			case 'N':
-			if (iso) {
-				vel /= 1.4;
-				xVel = -vel;
-				yVel = -vel;
-			} else {
-				xVel = 0;
-				yVel = -vel;
-			}
-			this.imageEntity.animation.select('walkUp');
-			break;
-
-			case 'S':
-			if (iso) {
-				vel /= 1.4;
-				xVel = vel;
-				yVel = vel;
-			} else {
-				xVel = 0;
-				yVel = vel;
-			}
-			this._box2dBody.SetLinearVelocity(new IgePoint3d(0, vel, 0));
-			this._box2dBody.SetAwake(true);
-			this.imageEntity.animation.select('walkDown');
-			break;
-
-			case 'E':
-			if (iso) {
-				vel /= 2;
-				xVel = vel;
-				yVel = -vel;
-			} else {
-				xVel = vel;
-				yVel = 0;
-			}
-			this._box2dBody.SetLinearVelocity(new IgePoint3d(vel, 0, 0));
-			this._box2dBody.SetAwake(true);
-			this.imageEntity.animation.select('walkRight');
-			break;
-
-			case 'W':
-			if (iso) {
-				vel /= 2;
-				xVel = -vel;
-				yVel = vel;
-			} else {
-				xVel = -vel;
-				yVel = 0;
-			}
-			this._box2dBody.SetLinearVelocity(new IgePoint3d(-vel, 0, 0));
-			this._box2dBody.SetAwake(true);
-			this.imageEntity.animation.select('walkLeft');
-			break;
-
-			case 'NE':
-			if (iso) {
-				xVel = 0;
-				yVel = -vel;
-			} else {
-				xVel = vel;
-				yVel = -vel;
-			}
-			this._box2dBody.SetLinearVelocity(new IgePoint3d(vel, -vel, 0));
-			this._box2dBody.SetAwake(true);
-			this.imageEntity.animation.select('walkRight');
-			break;
-
-			case 'NW':
-			if (iso) {
-				xVel = -vel;
-				yVel = 0;
-			} else {
-				xVel = -vel;
-				yVel = -vel;
-			}
-			this._box2dBody.SetLinearVelocity(new IgePoint3d(-vel, -vel, 0));
-			this._box2dBody.SetAwake(true);
-			this.imageEntity.animation.select('walkLeft');
-			break;
-
-			case 'SE':
-			if (iso) {
-				xVel = vel;
-				yVel = 0;
-			} else {
-				xVel = vel;
-				yVel = vel;
-			}
-			this._box2dBody.SetLinearVelocity(new IgePoint3d(vel, vel, 0));
-			this._box2dBody.SetAwake(true);
-			this.imageEntity.animation.select('walkRight');
-			break;
-
-			case 'SW':
-			if (iso) {
-				xVel = 0;
-				yVel = vel;
-			} else {
-				xVel = -vel;
-				yVel = vel;
-			}
-			this._box2dBody.SetLinearVelocity(new IgePoint3d(-vel, vel, 0));
-			this._box2dBody.SetAwake(true);
-			this.imageEntity.animation.select('walkLeft');
-			break;
-
-			default:
-			this.imageEntity.animation.stop();
-			break;
-		}
-
-		this._box2dBody.SetLinearVelocity(new IgePoint3d(xVel, yVel, 0));
-		this._box2dBody.SetAwake(true);
 	}
 });
 

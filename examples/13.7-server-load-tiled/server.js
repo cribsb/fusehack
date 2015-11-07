@@ -18,7 +18,7 @@ var Server = IgeClass.extend({
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
 			// Start the network server
-			.network.start(2000, function () {
+			.network.start(5000, function () {
 				// Start the game engine
 				ige.start(function (success) {
 					// Check if the engine started successfully
