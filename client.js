@@ -2,10 +2,10 @@ var Client = IgeClass.extend({
 	classId: 'Client',
 	init: function () {
 		
-var self = this,
-				gameTexture = [];
+		var self = this,
+		gameTexture = [];
 		//ige.input.debug(true);
-		
+
 		// Setup the control system
 		ige.input.mapAction('walkLeft', ige.input.key.left);
 		ige.input.mapAction('walkRight', ige.input.key.right);
@@ -33,6 +33,9 @@ var self = this,
 		// Load a smart texture
 		self.gameTexture.simpleBox = new IgeTexture('./assets/textures/smartTextures/simpleBox.js');
 
+		// Listen for the key up event
+		ige.input.on('keyUp', function (event, keyCode) { self._keyUp(event, keyCode); });
+
 		// Wait for our textures to load before continuing
 		ige.on('texturesLoaded', function () {
 			// Create the HTML canvas
@@ -43,7 +46,7 @@ var self = this,
 				// Check if the engine started successfully
 				if (success) {
 
-ige.network.start('http://fusehack.azurewebsites.net', function () {
+					ige.network.start('http://37.34.61.80:' + process.env.PORT || 2000, function () {
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(60) // Render the simulation 160 milliseconds in the past
 							// Create a listener that will fire whenever an entity
@@ -57,33 +60,34 @@ ige.network.start('http://fusehack.azurewebsites.net', function () {
 					ige.addGraph('IgeBaseScene');
 
 					self.obj[0] = new IgeEntity()
-						.translateTo(-384 + 16, -240 + 16, 0)
-						.texture(fair)
-						.width(32)
-						.height(32)
-						.mount(ige.$('baseScene'));
+					.translateTo(-384 + 16, -240 + 16, 0)
+					.texture(fair)
+					.width(32)
+					.height(32)
+					.mount(ige.$('baseScene'))
+					//.addBehaviour('Client_behaviour', this._behaviour);
 
 					// Create the scene
 					self.scene1 = new IgeScene2d()
-						.id('scene1')
-						.translateTo(0, 0, 0)
+					.id('scene1')
+					.translateTo(0, 0, 0)
 						//.drawBounds(true)
 						.mount(ige.$('baseScene'));
 
 					// Create the main viewport
 					self.vp2 = new IgeViewport()
-						.id('vp2')
-						.autoSize(true)
-						.scene(self.scene1)
+					.id('vp2')
+					.autoSize(true)
+					.scene(self.scene1)
 						//.drawBounds(true)
 						.mount(ige);
 
 					// Create the texture maps
 					self.textureMap1 = new IgeTextureMap()
-						.depth(0)
-						.tileWidth(32)
-						.tileHeight(32)
-						.gridSize(24, 15)
+					.depth(0)
+					.tileWidth(32)
+					.tileHeight(32)
+					.gridSize(24, 15)
 						//.drawGrid(true)
 						.drawMouse(true)
 						.translateTo(-384, -240, 0)
@@ -92,7 +96,7 @@ ige.network.start('http://fusehack.azurewebsites.net', function () {
 						//.drawSectionBounds(true)
 						.mount(self.scene1);
 
-					self.textureMap1.addTexture(gameTexture[0]);
+						self.textureMap1.addTexture(gameTexture[0]);
 
 					// Paint some awesome pavement tiles randomly selecting
 					// the "un-cracked" or "cracked" cell of gameTexture[2]
@@ -107,13 +111,151 @@ ige.network.start('http://fusehack.azurewebsites.net', function () {
 
 					console.log(self.textureMap1.map.mapDataString());
 				});
-				}
+			}
 			});
 		});
 	},
 
 	tick: function() {
+	},
 
+	_keyUp: function() {
+		console.log("4");
+		var vel = 6,
+		xVel, yVel,
+		direction = '',
+		iso = (this._parent && this._parent.isometricMounts() === true);
+
+		if (ige.input.actionState('walkUp')) {
+			direction += 'N';
+		}
+
+		if (ige.input.actionState('walkDown')) {
+			direction += 'S';
+		}
+
+		if (ige.input.actionState('walkLeft')) {
+			direction += 'W';
+		}
+
+		if (ige.input.actionState('walkRight')) {
+			direction += 'E';
+		}
+
+		switch (direction) {
+			case 'N':
+			if (iso) {
+				vel /= 1.4;
+				xVel = -vel;
+				yVel = -vel;
+			} else {
+				xVel = 0;
+				yVel = -vel;
+			}
+			this.imageEntity.animation.select('walkUp');
+			break;
+
+			case 'S':
+			if (iso) {
+				vel /= 1.4;
+				xVel = vel;
+				yVel = vel;
+			} else {
+				xVel = 0;
+				yVel = vel;
+			}
+			this._box2dBody.SetLinearVelocity(new IgePoint3d(0, vel, 0));
+			this._box2dBody.SetAwake(true);
+			this.imageEntity.animation.select('walkDown');
+			break;
+
+			case 'E':
+			if (iso) {
+				vel /= 2;
+				xVel = vel;
+				yVel = -vel;
+			} else {
+				xVel = vel;
+				yVel = 0;
+			}
+			this._box2dBody.SetLinearVelocity(new IgePoint3d(vel, 0, 0));
+			this._box2dBody.SetAwake(true);
+			this.imageEntity.animation.select('walkRight');
+			break;
+
+			case 'W':
+			if (iso) {
+				vel /= 2;
+				xVel = -vel;
+				yVel = vel;
+			} else {
+				xVel = -vel;
+				yVel = 0;
+			}
+			this._box2dBody.SetLinearVelocity(new IgePoint3d(-vel, 0, 0));
+			this._box2dBody.SetAwake(true);
+			this.imageEntity.animation.select('walkLeft');
+			break;
+
+			case 'NE':
+			if (iso) {
+				xVel = 0;
+				yVel = -vel;
+			} else {
+				xVel = vel;
+				yVel = -vel;
+			}
+			this._box2dBody.SetLinearVelocity(new IgePoint3d(vel, -vel, 0));
+			this._box2dBody.SetAwake(true);
+			this.imageEntity.animation.select('walkRight');
+			break;
+
+			case 'NW':
+			if (iso) {
+				xVel = -vel;
+				yVel = 0;
+			} else {
+				xVel = -vel;
+				yVel = -vel;
+			}
+			this._box2dBody.SetLinearVelocity(new IgePoint3d(-vel, -vel, 0));
+			this._box2dBody.SetAwake(true);
+			this.imageEntity.animation.select('walkLeft');
+			break;
+
+			case 'SE':
+			if (iso) {
+				xVel = vel;
+				yVel = 0;
+			} else {
+				xVel = vel;
+				yVel = vel;
+			}
+			this._box2dBody.SetLinearVelocity(new IgePoint3d(vel, vel, 0));
+			this._box2dBody.SetAwake(true);
+			this.imageEntity.animation.select('walkRight');
+			break;
+
+			case 'SW':
+			if (iso) {
+				xVel = 0;
+				yVel = vel;
+			} else {
+				xVel = -vel;
+				yVel = vel;
+			}
+			this._box2dBody.SetLinearVelocity(new IgePoint3d(-vel, vel, 0));
+			this._box2dBody.SetAwake(true);
+			this.imageEntity.animation.select('walkLeft');
+			break;
+
+			default:
+			this.imageEntity.animation.stop();
+			break;
+		}
+
+		this._box2dBody.SetLinearVelocity(new IgePoint3d(xVel, yVel, 0));
+		this._box2dBody.SetAwake(true);
 	},
 
 	/**
@@ -123,17 +265,17 @@ ige.network.start('http://fusehack.azurewebsites.net', function () {
 	 * @return {*}
 	 */
 	walkTo: function (x, y) {
-		var self = this,
-			distX = x - this.translate().x(),
-			distY = y - this.translate().y(),
-			distance = Math.distance(
-				this.translate().x(),
-				this.translate().y(),
-				x,
-				y
-			),
-			speed = 0.1,
-			time = (distance / speed);
+	 	var self = this,
+	 	distX = x - this.translate().x(),
+	 	distY = y - this.translate().y(),
+	 	distance = Math.distance(
+	 		this.translate().x(),
+	 		this.translate().y(),
+	 		x,
+	 		y
+	 		),
+	 	speed = 0.1,
+	 	time = (distance / speed);
 
 		// Set the animation based on direction
 		if (Math.abs(distX) > Math.abs(distY)) {
@@ -158,25 +300,25 @@ ige.network.start('http://fusehack.azurewebsites.net', function () {
 
 		// Start tweening the little person to their destination
 		this._translate.tween()
-			.stopAll()
-			.properties({x: x, y: y})
-			.duration(time)
-			.afterTween(function () {
-				self.animation.stop();
+		.stopAll()
+		.properties({x: x, y: y})
+		.duration(time)
+		.afterTween(function () {
+			self.animation.stop();
 				// And you could make him reset back
 				// to his original animation frame with:
 				//self.cell(10);
 			})
-			.start();
+		.start();
 
 		return this;
 	},
 
 	_behaviour: function (ctx) {
 		var vel = 6,
-			xVel, yVel,
-			direction = '',
-			iso = (this._parent && this._parent.isometricMounts() === true);
+		xVel, yVel,
+		direction = '',
+		iso = (this._parent && this._parent.isometricMounts() === true);
 
 		if (ige.input.actionState('walkUp')) {
 			direction += 'N';
@@ -196,114 +338,114 @@ ige.network.start('http://fusehack.azurewebsites.net', function () {
 
 		switch (direction) {
 			case 'N':
-				if (iso) {
-					vel /= 1.4;
-					xVel = -vel;
-					yVel = -vel;
-				} else {
-					xVel = 0;
-					yVel = -vel;
-				}
-				this.imageEntity.animation.select('walkUp');
-				break;
+			if (iso) {
+				vel /= 1.4;
+				xVel = -vel;
+				yVel = -vel;
+			} else {
+				xVel = 0;
+				yVel = -vel;
+			}
+			this.imageEntity.animation.select('walkUp');
+			break;
 
 			case 'S':
-				if (iso) {
-					vel /= 1.4;
-					xVel = vel;
-					yVel = vel;
-				} else {
-					xVel = 0;
-					yVel = vel;
-				}
-				this._box2dBody.SetLinearVelocity(new IgePoint3d(0, vel, 0));
-				this._box2dBody.SetAwake(true);
-				this.imageEntity.animation.select('walkDown');
-				break;
+			if (iso) {
+				vel /= 1.4;
+				xVel = vel;
+				yVel = vel;
+			} else {
+				xVel = 0;
+				yVel = vel;
+			}
+			this._box2dBody.SetLinearVelocity(new IgePoint3d(0, vel, 0));
+			this._box2dBody.SetAwake(true);
+			this.imageEntity.animation.select('walkDown');
+			break;
 
 			case 'E':
-				if (iso) {
-					vel /= 2;
-					xVel = vel;
-					yVel = -vel;
-				} else {
-					xVel = vel;
-					yVel = 0;
-				}
-				this._box2dBody.SetLinearVelocity(new IgePoint3d(vel, 0, 0));
-				this._box2dBody.SetAwake(true);
-				this.imageEntity.animation.select('walkRight');
-				break;
+			if (iso) {
+				vel /= 2;
+				xVel = vel;
+				yVel = -vel;
+			} else {
+				xVel = vel;
+				yVel = 0;
+			}
+			this._box2dBody.SetLinearVelocity(new IgePoint3d(vel, 0, 0));
+			this._box2dBody.SetAwake(true);
+			this.imageEntity.animation.select('walkRight');
+			break;
 
 			case 'W':
-				if (iso) {
-					vel /= 2;
-					xVel = -vel;
-					yVel = vel;
-				} else {
-					xVel = -vel;
-					yVel = 0;
-				}
-				this._box2dBody.SetLinearVelocity(new IgePoint3d(-vel, 0, 0));
-				this._box2dBody.SetAwake(true);
-				this.imageEntity.animation.select('walkLeft');
-				break;
+			if (iso) {
+				vel /= 2;
+				xVel = -vel;
+				yVel = vel;
+			} else {
+				xVel = -vel;
+				yVel = 0;
+			}
+			this._box2dBody.SetLinearVelocity(new IgePoint3d(-vel, 0, 0));
+			this._box2dBody.SetAwake(true);
+			this.imageEntity.animation.select('walkLeft');
+			break;
 
 			case 'NE':
-				if (iso) {
-					xVel = 0;
-					yVel = -vel;
-				} else {
-					xVel = vel;
-					yVel = -vel;
-				}
-				this._box2dBody.SetLinearVelocity(new IgePoint3d(vel, -vel, 0));
-				this._box2dBody.SetAwake(true);
-				this.imageEntity.animation.select('walkRight');
-				break;
+			if (iso) {
+				xVel = 0;
+				yVel = -vel;
+			} else {
+				xVel = vel;
+				yVel = -vel;
+			}
+			this._box2dBody.SetLinearVelocity(new IgePoint3d(vel, -vel, 0));
+			this._box2dBody.SetAwake(true);
+			this.imageEntity.animation.select('walkRight');
+			break;
 
 			case 'NW':
-				if (iso) {
-					xVel = -vel;
-					yVel = 0;
-				} else {
-					xVel = -vel;
-					yVel = -vel;
-				}
-				this._box2dBody.SetLinearVelocity(new IgePoint3d(-vel, -vel, 0));
-				this._box2dBody.SetAwake(true);
-				this.imageEntity.animation.select('walkLeft');
-				break;
+			if (iso) {
+				xVel = -vel;
+				yVel = 0;
+			} else {
+				xVel = -vel;
+				yVel = -vel;
+			}
+			this._box2dBody.SetLinearVelocity(new IgePoint3d(-vel, -vel, 0));
+			this._box2dBody.SetAwake(true);
+			this.imageEntity.animation.select('walkLeft');
+			break;
 
 			case 'SE':
-				if (iso) {
-					xVel = vel;
-					yVel = 0;
-				} else {
-					xVel = vel;
-					yVel = vel;
-				}
-				this._box2dBody.SetLinearVelocity(new IgePoint3d(vel, vel, 0));
-				this._box2dBody.SetAwake(true);
-				this.imageEntity.animation.select('walkRight');
-				break;
+			if (iso) {
+				xVel = vel;
+				yVel = 0;
+			} else {
+				xVel = vel;
+				yVel = vel;
+			}
+			this._box2dBody.SetLinearVelocity(new IgePoint3d(vel, vel, 0));
+			this._box2dBody.SetAwake(true);
+			this.imageEntity.animation.select('walkRight');
+			break;
 
 			case 'SW':
-				if (iso) {
-					xVel = 0;
-					yVel = vel;
-				} else {
-					xVel = -vel;
-					yVel = vel;
-				}
-				this._box2dBody.SetLinearVelocity(new IgePoint3d(-vel, vel, 0));
-				this._box2dBody.SetAwake(true);
-				this.imageEntity.animation.select('walkLeft');
-				break;
+			if (iso) {
+				xVel = 0;
+				yVel = vel;
+			} else {
+				xVel = -vel;
+				yVel = vel;
+			}
+			this._box2dBody.SetLinearVelocity(new IgePoint3d(-vel, vel, 0));
+			this._box2dBody.SetAwake(true);
+			this.imageEntity.animation.select('walkLeft');
+			break;
 
 			default:
-				this.imageEntity.animation.stop();
-				break;
+			this.imageEntity.animation.stop();
+			break;
 		}
 
 		this._box2dBody.SetLinearVelocity(new IgePoint3d(xVel, yVel, 0));

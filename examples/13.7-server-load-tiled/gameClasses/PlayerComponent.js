@@ -25,7 +25,7 @@ var PlayerComponent = IgeClass.extend({
 		ige.input.on('keyUp', function (event, keyCode) { self._keyUp(event, keyCode); });
 
 		// Add the playerComponent behaviour to the entity
-		this._entity.addBehaviour('playerComponent_behaviour', this._behaviour);
+		this._entity.addBehaviour('playerComponent_behaviour', self._behaviour);
 	},
 
 	_keyUp: function (event, keyCode) {
