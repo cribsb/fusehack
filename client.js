@@ -1,6 +1,18 @@
 var Client = IgeClass.extend({
 	classId: 'Client',
 	init: function () {
+		
+
+		ige.network.start('http://fusehack.herokuapp.com', function () {
+						ige.network.addComponent(IgeStreamComponent)
+							.stream.renderLatency(60) // Render the simulation 160 milliseconds in the past
+							// Create a listener that will fire whenever an entity
+							// is created because of the incoming stream data
+							.stream.on('entityCreated', function (entity) {
+								console.log('Stream entity created with ID: ' + entity.id());
+							});
+
+
 		var self = this,
 				gameTexture = [];
 		ige.input.debug(true);
