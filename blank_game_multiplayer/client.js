@@ -15,11 +15,11 @@ var Client = IgeClass.extend({
 		ige.createFrontBuffer(true);
 
 		// Load the textures we want to use
-		this.textures = {
-			ship: new IgeTexture('./assets/PlayerTexture.js')
-		};
+		//this.textures = {
+		//	ship: new IgeTexture('./assets/PlayerTexture.js')
+		//};
 
-		ige.on('texturesLoaded', function () {
+		//ige.on('texturesLoaded', function () {
 			// Ask the engine to start
 			ige.start(function (success) {
 				// Check if the engine started successfully
@@ -42,10 +42,32 @@ var Client = IgeClass.extend({
 						
 						// Load the base scene data
 						ige.addGraph('IgeBaseScene');
+
+						var baseScene = ige.$('baseScene'),
+							menuScene;
+
+						menuScene = new IgeScene2d()
+							.id('menuScene')
+							.ignoreCamera(true)
+							.mount('baseScene');
+
+						ige.ui.style('.mainMenuStyle', {
+							'width': '90%',
+							'height': '75%',
+							'borderColor': '#FF4400',
+							'bporderWidth': '2',
+							'borderRadius' : '10',
+							'backgroundColor': '#333333'
+						});
+
+						new IgeUiElement()
+							.id('menu1')
+							.styleClass('mainMenuStyle')
+							.mount(menuScene);
 					});
 				}
 			});
-		});
+		//});
 	}
 });
 
