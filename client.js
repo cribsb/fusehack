@@ -1,49 +1,66 @@
 var Client = IgeClass.extend({
 	classId: 'Client',
-
 	init: function () {
-		//ige.timeScale(0.1);
-		ige.showStats(1);
+		var self = this;
+		//ige.input.debug(true);
+		
+		ige.addComponent(IgeEditorComponent);
 
 		// Load our textures
-		var self = this;
-		self.log("oke");
+		self.obj = [];
 
-		// Enable networking
-		ige.addComponent(IgeNetIoComponent);
+		// Load the fairy texture and store it in the gameTexture object
+		self.gameTexture = {};
+		self.gameTexture.fairy = new IgeTexture('./assets/textures/sprites/fairy.png');
 
-		// Create the HTML canvas
-		ige.createFrontBuffer(true);
+		// Load a smart texture
+		self.gameTexture.simpleBox = new IgeTexture('./assets/textures/smartTextures/simpleBox.js');
 
-		// Load the textures we want to use
-		this.textures = {
-			ship: new IgeTexture('./assets/PlayerTexture.js')
-		};
-
+		// Wait for our textures to load before continuing
 		ige.on('texturesLoaded', function () {
-			// Ask the engine to start
+			// Create the HTML canvas
+			ige.createFrontBuffer(true);
+
+			// Start the engine
 			ige.start(function (success) {
 				// Check if the engine started successfully
 				if (success) {
-					// Start the networking (you can do this elsewhere if it
-					// makes sense to connect to the server later on rather
-					// than before the scene etc are created... maybe you want
-					// a splash screen or a menu first? Then connect after you've
-					// got a username or something?
-					ige.network.start('http://fusehack.azurewebsites.net', function () {
-						// Setup the network stream handler
-						ige.network.addComponent(IgeStreamComponent)
-							.stream.renderLatency(80) // Render the simulation 160 milliseconds in the past
-							// Create a listener that will fire whenever an entity
-							// is created because of the incoming stream data
-							.stream.on('entityCreated', function (entity) {
-								self.log('Stream entity created with ID: ' + entity.id());
+					// Load the base scene data
+					ige.addGraph('IgeBaseScene');
 
-							});
-						
-						// Load the base scene data
-						ige.addGraph('IgeBaseScene');
-					});
+					// Create an entity and mount it to the scene
+					self.obj[0] = new Rotator(0.1)
+						.id('fairy1')
+						.depth(1)
+						.width(100)
+						.height(100)
+						.texture(self.gameTexture.fairy)
+						.translateTo(0, 0, 0)
+						.mount(ige.$('baseScene'));
+
+					// Create a second rotator entity and mount
+					// it to the first one at 0, 50 relative to the
+					// parent
+					self.obj[1] = new Rotator(0.1)
+						.id('fairy2')
+						.depth(1)
+						.width(50)
+						.height(50)
+						.texture(self.gameTexture.fairy)
+						.translateTo(0, 50, 0)
+						.mount(self.obj[0]);
+
+					// Create a third rotator entity and mount
+					// it to the first on at 0, -50 relative to the
+					// parent, but assign it a smart texture!
+					self.obj[2] = new Rotator(0.1)
+						.id('simpleBox')
+						.depth(1)
+						.width(50)
+						.height(50)
+						.texture(self.gameTexture.simpleBox)
+						.translateTo(0, -50, 0)
+						.mount(self.obj[0]);
 				}
 			});
 		});
