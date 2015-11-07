@@ -8,6 +8,8 @@ var Server = IgeClass.extend({
 
 		var port = process.env.PORT || 2000;
 
+		console.log(port);
+
 		// Define an object to hold references to our player entities
 		this.players = {};
 
