@@ -6,6 +6,8 @@ var Server = IgeClass.extend({
 		var self = this;
 		ige.timeScale(1);
 
+		var port = process.env.PORT || 2000;
+
 		// Define an object to hold references to our player entities
 		this.players = {};
 
@@ -15,7 +17,7 @@ var Server = IgeClass.extend({
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
 			// Start the network server
-			.network.start(2000, function () {
+			.network.start(port, function () {
 				// Networking has started so start the game engine
 				ige.start(function (success) {
 					// Check if the engine started successfully
