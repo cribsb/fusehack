@@ -1,1 +1,1 @@
-web: node ./server/ige.js -g .
+web: node ./server/ige.js -g ./app/
