@@ -7,6 +7,7 @@ var Client = IgeClass.extend({
 
 		// Load our textures
 		var self = this;
+		self.log("oke");
 
 		// Enable networking
 		ige.addComponent(IgeNetIoComponent);
@@ -16,7 +17,7 @@ var Client = IgeClass.extend({
 
 		// Load the textures we want to use
 		this.textures = {
-			ship: new IgeTexture('assets/PlayerTexture.js')
+			ship: new IgeTexture('./assets/PlayerTexture.js')
 		};
 
 		ige.on('texturesLoaded', function () {
@@ -29,7 +30,7 @@ var Client = IgeClass.extend({
 					// than before the scene etc are created... maybe you want
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
-					ige.network.start('http://fusehack.azurewebsites.net:2000', function () {
+					ige.network.start('http:localhost:2000', function () {
 						// Setup the network stream handler
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(80) // Render the simulation 160 milliseconds in the past

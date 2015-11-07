@@ -5,6 +5,8 @@ var Server = IgeClass.extend({
 	init: function (options) {
 		var self = this;
 
+		var port = process.env.PORT || 2000;
+
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
 			// Start the network server
