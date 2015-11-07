@@ -2,53 +2,111 @@ var Client = IgeClass.extend({
 	classId: 'Client',
 	init: function () {
 		
+var self = this,
+				gameTexture = [];
+		//ige.input.debug(true);
+		
+		// Setup the control system
+		ige.input.mapAction('walkLeft', ige.input.key.left);
+		ige.input.mapAction('walkRight', ige.input.key.right);
+		ige.input.mapAction('walkUp', ige.input.key.up);
+		ige.input.mapAction('walkDown', ige.input.key.down);
 
-	ige.on('texturesLoaded', function () {
-			// Ask the engine to start
-		ige.start(function (success) {
+		ige.addComponent(IgeEditorComponent);
+
+		// Load our textures
+		self.obj = [];
+
+		// Enable networking
+		ige.addComponent(IgeNetIoComponent);
+
+		// Load the fairy texture and store it in the gameTexture object
+		self.gameTexture = {};
+		var fair = self.gameTexture.fairy = new IgeTexture('./assets/textures/sprites/fairy.png');
+
+		// Add the playerComponent behaviour to the entity
+		//this.fair.addBehaviour('playerComponent_behaviour', this._behaviour);
+
+		// Load the tilemaps
+		gameTexture[0] = new IgeCellSheet('./assets/textures/tiles/tilea5b.png', 8, 16);
+
+		// Load a smart texture
+		self.gameTexture.simpleBox = new IgeTexture('./assets/textures/smartTextures/simpleBox.js');
+
+		// Wait for our textures to load before continuing
+		ige.on('texturesLoaded', function () {
+			// Create the HTML canvas
+			ige.createFrontBuffer(true);
+
+			// Start the engine
+			ige.start(function (success) {
 				// Check if the engine started successfully
 				if (success) {
-					// Start the networking (you can do this elsewhere if it
-					// makes sense to connect to the server later on rather
-					// than before the scene etc are created... maybe you want
-					// a splash screen or a menu first? Then connect after you've
-					// got a username or something?
-					ige.network.start('http://fuseh.herokuapp.com', function () {
-						// Setup the network stream handler
+
+ige.network.start('http://fuseh.herokuapps.com', function () {
 						ige.network.addComponent(IgeStreamComponent)
-							.stream.renderLatency(80) // Render the simulation 160 milliseconds in the past
+							.stream.renderLatency(60) // Render the simulation 160 milliseconds in the past
 							// Create a listener that will fire whenever an entity
 							// is created because of the incoming stream data
 							.stream.on('entityCreated', function (entity) {
-								self.log('Stream entity created with ID: ' + entity.id());
-
+								//console.log('Stream entity created with ID: ' + entity.id());
 							});
-						
-						// Load the base scene data
-						ige.addGraph('IgeBaseScene');
 
-						var baseScene = ige.$('baseScene'),
-							menuScene;
 
-						menuScene = new IgeScene2d()
-							.id('menuScene')
-							.ignoreCamera(true)
-							.mount(baseScene);
+					// Load the base scene data
+					ige.addGraph('IgeBaseScene');
 
-						ige.ui.style('.mainMenuStyle', {
-							'width': '90%',
-							'height': '75%',
-							'borderColor': '#FF4400',
-							'bporderWidth': '2',
-							'borderRadius' : '10',
-							'backgroundColor': '#333333'
-						});
+					self.obj[0] = new IgeEntity()
+						.translateTo(-384 + 16, -240 + 16, 0)
+						.texture(fair)
+						.width(32)
+						.height(32)
+						.mount(ige.$('baseScene'));
 
-						new IgeUiElement()
-							.id('menu1')
-							.styleClass('mainMenuStyle')
-							.mount(menuScene);
-					});
+					// Create the scene
+					self.scene1 = new IgeScene2d()
+						.id('scene1')
+						.translateTo(0, 0, 0)
+						//.drawBounds(true)
+						.mount(ige.$('baseScene'));
+
+					// Create the main viewport
+					self.vp2 = new IgeViewport()
+						.id('vp2')
+						.autoSize(true)
+						.scene(self.scene1)
+						//.drawBounds(true)
+						.mount(ige);
+
+					// Create the texture maps
+					self.textureMap1 = new IgeTextureMap()
+						.depth(0)
+						.tileWidth(32)
+						.tileHeight(32)
+						.gridSize(24, 15)
+						//.drawGrid(true)
+						.drawMouse(true)
+						.translateTo(-384, -240, 0)
+						.drawBounds(true)
+						.autoSection(8)
+						//.drawSectionBounds(true)
+						.mount(self.scene1);
+
+					self.textureMap1.addTexture(gameTexture[0]);
+
+					// Paint some awesome pavement tiles randomly selecting
+					// the "un-cracked" or "cracked" cell of gameTexture[2]
+					// which are cells 22 and 86 respectively
+					var textureCell, x, y, texIndex;
+					for (x = 0; x < 24; x++) {
+						for (y = 0; y < 15; y++) {
+							textureCell = (Math.random() * 4) < 2 ? 22 : 86;
+							self.textureMap1.paintTile(x, y, 0, textureCell);
+						}
+					}
+
+					console.log(self.textureMap1.map.mapDataString());
+				});
 				}
 			});
 		});
