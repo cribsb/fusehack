@@ -49,7 +49,7 @@ var Client = IgeClass.extend({
 						menuScene = new IgeScene2d()
 							.id('menuScene')
 							.ignoreCamera(true)
-							.mount('baseScene');
+							.mount(baseScene);
 
 						ige.ui.style('.mainMenuStyle', {
 							'width': '90%',
