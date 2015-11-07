@@ -26,6 +26,28 @@ var Server = IgeClass.extend({
 
 						// Load the base scene data
 						ige.addGraph('IgeBaseScene');
+
+						var baseScene = ige.$('baseScene'),
+							menuScene;
+
+						menuScene = new IgeScene2d()
+							.id('menuScene')
+							.ignoreCamera(true)
+							.mount('baseScene');
+
+						ige.ui.style('.mainMenuStyle', {
+							'width': '90%',
+							'height': '75%',
+							'borderColor': '#FF4400',
+							'bporderWidth': '2',
+							'borderRadius' : '10',
+							'backgroundColor': '#333333'
+						});
+
+						new IgeUiElement()
+							.id('menu1')
+							.styleClass('mainMenuStyle')
+							.mount(menuScene);
 					}
 				});
 			});
