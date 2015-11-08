@@ -11,8 +11,7 @@ var Server = IgeClass.extend({
 			.box2d.sleep(true)
 			.box2d.gravity(0, 0)
 			.box2d.createWorld()
-			.box2d.start()
-			;
+			.box2d.start();
 
 		// Define an object to hold references to our player entities
 		this.players = {};
@@ -122,6 +121,7 @@ var Server = IgeClass.extend({
 
 								// Create static box2d objects from the dirt layer
 								ige.box2d.staticsFromMap(layersById.Tilelaag1);
+								ige.box2d.staticsFromMap(layersById.Tilelaag2);
 
 								// Create a path-finder
 								self.pathFinder = new IgePathFinder()

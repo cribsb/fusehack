@@ -26,8 +26,32 @@ var ServerNetworkEvents = {
 	_onPlayerEntity: function (data, clientId) {
 		if (!ige.server.players[clientId]) {
 			ige.server.players[clientId] = new Character(clientId)
+			.box2dBody({
+						type: 'dynamic',
+						linearDamping: 0.0,
+						angularDamping: 0.1,
+						allowSleep: true,
+						bullet: false,
+						gravitic: true,
+						fixedRotation: false,
+						fixtures: [{
+							density: 1.0,
+							friction: 0.5,
+							restitution: 0.2,
+							shape: {
+								type: 'circle',
+								data: {
+									// The position of the fixture relative to the body
+									x: 0,
+									y: 0,
+									radius: 16
+								}
+							}
+						}]
+					})
 				.addComponent(PlayerComponent)
 				.streamMode(1)
+				.translateTo(128, 128, 0)
 				.mount(ige.server.foregroundScene);
 
 			// Tell the client to track their player entity
