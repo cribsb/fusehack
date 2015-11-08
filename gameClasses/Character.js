@@ -9,6 +9,7 @@ var Character = IgeEntity.extend({
 		this.health = 100;
 		this.hit = 0;
 		this.klik = false;
+		this.clicked = false;
 
 		IgeEntity.prototype.init.call(this);
 
@@ -17,11 +18,13 @@ var Character = IgeEntity.extend({
 		
 		this.mouseDown(function (event, control) {
 			this.klik = true;
+			this.clicked = true;
 			console.log('oke');
 		});
 
 		this.mouseUp(function (event, control){
 			this.klik = false;
+			this.clicked = false;
 		});
 
 		if (ige.isServer) {
@@ -155,11 +158,12 @@ var Character = IgeEntity.extend({
 			//console.log(mousePosAbs);
 		};
 
-		if (muisInRange && this.klik){
+		if (muisInRange && this.klik && !clicked){
 			hit = Math.random()*this.strength;
 			hit = Math.round(hit); 
 			this.damagePlayer(hit);
 			console.log("you've dealth " + hit + " damage!");
+			this.clicked = true;
 		};
 
 		if (ige.isClient) {
