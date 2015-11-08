@@ -19,6 +19,8 @@ var Server = IgeClass.extend({
 		// Define an array to hold our tile data
 		this.tileData = [];
 
+		this.numPlayers = 0;
+
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
 
@@ -112,7 +114,7 @@ var Server = IgeClass.extend({
 
 						var mapNumber = 0;
 
-						setInterval(function(){
+						//setInterval(function(){
 							// Load the Tiled map data and handle the return data
 							ige.addComponent(IgeTiledComponent)
 								.tiled.loadJson(tiled, function (layerArray, layersById) {
@@ -132,7 +134,6 @@ var Server = IgeClass.extend({
 
 									
 								});
-							}, 3000);
 					}
 				});
 			});

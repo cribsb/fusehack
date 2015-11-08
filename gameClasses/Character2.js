@@ -1,6 +1,6 @@
 // Define our player character classes
-var Character = IgeEntityBox2d.extend({
-	classId: 'Character',
+var Character2 = IgeEntityBox2d.extend({
+	classId: 'Character2',
 
 	init: function () {
 		var self = this;

@@ -2,7 +2,7 @@
 	// Smart texture
 var image = {
   render: function (ctx, entity, tickTime) {
-    var character = entity.parent();
+    var character = entity;
 
     if (character.currentHealth <= 0) {
       return;
@@ -15,7 +15,7 @@ var image = {
     var entityHeight = entity.height();
     
     var maxHealth = 100;
-    var currentHealth = character.attributes.health.getValue();
+    var currentHealth = entity.data('health');
 
     // Drawing the bar background
     ctx.fillStyle = '#ff0000';
