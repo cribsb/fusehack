@@ -42,6 +42,7 @@ if (!args['-deploy']) {
 
 // Include the control class
 IgeNode = require('./IgeNode');
+tmx = require('tmx-parser');
 
 // Start the app
 var igeNode = new IgeNode();

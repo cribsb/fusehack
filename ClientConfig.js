@@ -6,7 +6,8 @@ var igeClientConfig = {
 		'./gameClasses/PlayerComponent.js',
 		/* Standard game scripts */
 		'./client.js',
-		'./index.js'
+		'./index.js',
+		'./gameClasses/tmx.js'
 	]
 };
 

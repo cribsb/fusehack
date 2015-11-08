@@ -1,3 +1,26 @@
+function loadScript(url, callback){
+
+    var script = document.createElement("script")
+    script.type = "text/javascript";
+
+    if (script.readyState){  //IE
+        script.onreadystatechange = function(){
+            if (script.readyState == "loaded" ||
+                    script.readyState == "complete"){
+                script.onreadystatechange = null;
+                callback();
+            }
+        };
+    } else {  //Others
+        script.onload = function(){
+            callback();
+        };
+    }
+
+    script.src = url;
+    document.getElementsByTagName("head")[0].appendChild(script);
+}
+
 var Client = IgeClass.extend({
 	classId: 'Client',
 
@@ -94,15 +117,18 @@ var Client = IgeClass.extend({
 	
 						var texIndex = self.textureMap1.addTexture(self.textures.grassSheet);
 						
-						var map;
+						//var map;
 
 						// Ask the server to send us the tile data
 						ige.network.request('gameTiles', {}, function (commandName, data) {
 							console.log('gameTiles response', data);
 							
-							//tmx.parseFile('./assets/maps/map objecten.tmx', function(err, mapp){
-							//	map = mapp;
+							//loadScript('./gameClasses/tmx.js', function(){
+								//parseFile('./assets/maps/map objecten.tmx', function(err, mapp){
+								//map = mapp;
 							//});
+							});
+							
 
 							// Paint the texture map based on the data sent from the server
 							var x, y, tileData;
