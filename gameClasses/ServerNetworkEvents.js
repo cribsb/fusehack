@@ -25,24 +25,8 @@ var ServerNetworkEvents = {
 		}
 	},
 
-	_onDamageP1: function(damage) {
-		ige.server.char1health -= damage;
-		console.log(ige.server.char1health);
-		console.log('p1 dam');
-	},
-
-	_onDamageP2: function(damage) {
-		ige.server.char2health -= damage;
-		console.log(ige.server.char2health);
-	},
-
-	_onReloadMap: function() {
-		if(ige.server.mapNumber == 1){
-			ige.server.mapNumber = 2;
-		}
-		if(ige.server.mapNumber == 2){
-			ige.server.mapNumber = 1;
-		}
+	_onDestroyPlayer: function(clientId) {
+		
 	},
 
 	_onPlayerEntity: function (data, clientId) {

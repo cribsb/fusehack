@@ -2,7 +2,6 @@ var config = {
 	include: [
 		{name: 'ServerNetworkEvents', path: './gameClasses/ServerNetworkEvents'},
 		{name: 'Character', path: './gameClasses/Character'},
-		{name: 'Character2', path: './gameClasses/Character2'},
 		{name: 'PlayerComponent', path: './gameClasses/PlayerComponent'},
 		{name: 'tiled', path: './assets/lavaland'},
 		{name: 'tiled2', path: './assets/maps/anothermap'},

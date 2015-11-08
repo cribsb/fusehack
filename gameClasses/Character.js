@@ -39,23 +39,41 @@ var Character = IgeEntityBox2d.extend({
 
 			
 			var cellSheet1 = new IgeCellSheet('./assets/textures/sprites/vx_chara02_c.png', 12, 8);
-			var cellSheet2 = new IgeCellSheet('./assets/textures/sprites/charchip01.png', 12, 8);
-			var cellSheet3 = new IgeCellSheet('./assets/textures/sprites/prettycoolheh.png', 12, 8);
-			var cellSheet4 = new IgeCellSheet('./assets/textures/sprites/shinigami.png', 12, 8);
-			
+	      	var cellSheet2 = new IgeCellSheet('./assets/textures/sprites/charchip01.png', 12, 8);
+	      	var cellSheet3 = new IgeCellSheet('./assets/textures/sprites/prettycoolheh.png', 12 8);
+	        var cellSheet4 = new IgeCellSheet('./assets/textures/sprites/shinigami.png', 12, 8);
+	        var cellSheet5 = new IgeCellSheet('./assets/textures/sprites/gallery_6129_38_17945.png', 12, 8);
+	        var cellSheet6 = new IgeCellSheet('./assets/textures/sprites/gallery_72313_146_12172.png', 12, 8);
+	        var cellSheet7 = new IgeCellSheet('./assets/textures/sprites/gallery_72313_146_21247.png', 12 8);
+	        var cellSheet8 = new IgeCellSheet('./assets/textures/sprites/guard01.png', 12, 8);
+	        var cellSheet9 = new IgeCellSheet('./assets/textures/sprites/guard02.png', 12 8);
+	        var cellSheet0 = new IgeCellSheet('./assets/textures/sprites/womanWalking.png', 12, 8);
+	      
 
-			var cell = Math.random() * 4
+	        var cell = Math.random() * 10
 
-			// Load the character texture file
-			if(cell < 1){
-				this._characterTexture = cellSheet1;
-			} else if(cell < 2){
-				this._characterTexture = cellSheet2;
-			} else if(cell < 3){
-				this._characterTexture = cellSheet3;
-			} else {
-				this._characterTexture = cellSheet4;
-			};
+	        // Load the character texture file
+	        if(cell < 1){
+	          this._characterTexture = cellSheet1;
+	        } else if(cell < 2){
+	          this._characterTexture = cellSheet2;
+	        } else if(cell < 3){
+	          this._characterTexture = cellSheet3;
+	        } else if(cell < 4){
+	          this._characterTexture = cellSheet4;
+	        } else if(cell < 5){
+	          this._characterTexture = cellSheet5;
+	        } else if(cell < 6){
+	          this._characterTexture = cellSheet6;
+	        } else if(cell < 7){
+	          this._characterTexture = cellSheet7;
+	        } else if(cell < 8){
+	          this._characterTexture = cellSheet8;
+	        } else if(cell < 9){
+	          this._characterTexture = cellSheet9;
+	        } else {
+	          this._characterTexture = cellSheet0;
+	        };
 	
 			// Wait for the texture to load
 			this._characterTexture.on('loaded', function () {
@@ -271,7 +289,7 @@ var Character = IgeEntityBox2d.extend({
 		if (this._characterTexture) {
 			this._characterTexture.destroy();
 		}
-		ige.network.send('mapreload');
+		ige.network.send('destroyPlayer');
 		// Call the super class
 		IgeEntityBox2d.prototype.destroy.call(this);
 	}

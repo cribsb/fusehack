@@ -47,9 +47,7 @@ var Server = IgeClass.extend({
 						
 						ige.network.define('playerEntity', self._onPlayerEntity);
 
-						ige.network.define('damageP1', self._onDamageP1);
-						ige.network.define('damageP2', self._onDamageP2);
-						ige.network.define('mapreload', self._onReloadMap);
+						ige.network.define('destroyPlayer', self._onDestroyPLayer);
 
 						ige.network.define('playerControlLeftDown', self._onPlayerLeftDown);
 						ige.network.define('playerControlRightDown', self._onPlayerRightDown);
