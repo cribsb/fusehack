@@ -12,7 +12,7 @@ var Character2 = IgeEntityBox2d.extend({
 		this.klik = false;
 		this.clicked = false;
 
-		IgeEntityBox2d.prototype.init.call(this);
+		
 
 		// Set the co-ordinate system as isometric
 		this.isometric(false);
@@ -65,6 +65,7 @@ var Character2 = IgeEntityBox2d.extend({
 		}
 		
 		this._lastTranslate = this._translate.clone();
+		IgeEntityBox2d.prototype.init.call(this);
 	},
 
 	/**
