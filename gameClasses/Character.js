@@ -6,8 +6,8 @@ var Character = IgeEntityBox2d.extend({
 		var self = this;
 
 		this.strength = 30;
-		this.data('health', 100);
-		this.health = 100;
+		this.data('health', this.health);
+		this.health = Math.random(70, 170);
 		this.hit = 0;
 		this.klik = false;
 		this.clicked = false;
