@@ -18,7 +18,6 @@ var Character = IgeEntity.extend({
 		
 		this.mouseDown(function (event, control) {
 			this.klik = true;
-			console.log('oke');
 		});
 
 		this.mouseUp(function (event, control){
@@ -152,7 +151,7 @@ var Character = IgeEntity.extend({
 	update: function (ctx, tickDelta) {
 
 		var mousePosAbs = this.mousePosAbsolute();
-		if (mousePosAbs.x <10.0 && mousePosAbs.x > -10 && mousePosAbs.y < 10 && mousePosAbs.y> -10 ){
+		if (mousePosAbs.x <100 && mousePosAbs.x > -100 && mousePosAbs.y < 100 && mousePosAbs.y> -100 ){
 			var muisInRange = true;
 			//console.log(mousePosAbs);
 		};
