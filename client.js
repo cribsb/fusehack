@@ -32,8 +32,7 @@ var Client = IgeClass.extend({
 					// than before the scene etc are created... maybe you want
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
-					ige.network.start('http://37.34.61.80:2000', function () {
-					//ige.network.start('http://localhost:5000', function () {
+					ige.network.start('http://localhost:2000', function () {
 						// Setup the network command listeners
 						ige.network.define('playerEntity', self._onPlayerEntity); // Defined in ./gameClasses/ClientNetworkEvents.js
 
@@ -88,17 +87,6 @@ var Client = IgeClass.extend({
 						// data messages.
 						ige.network.debugMax(10);
 						ige.network.debug(true);
-
-
-
-						// Create an IgeUiTimeStream entity that will allow us to "visualise" the
-						// timestream data being interpolated by the player entity
-						//self.tsVis = new IgeUiTimeStream()
-							//.height(140)
-							//.width(400)
-							//.top(0)
-							//.center(0)
-							//.mount(self.uiScene);
 
 						self.custom1 = {
 							name: 'Delta',
