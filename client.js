@@ -87,21 +87,29 @@ var Client = IgeClass.extend({
 							.translateTo(0, 0, 0)
 							.drawBounds(false)
 							.autoSection(10)
-							.drawSectionBounds(true)
-							.isometricMounts(true)
+							//.drawSectionBounds(true)
+							.isometricMounts(false)
 							//.translateTo(300, 300, 0)
 							.mount(self.backgroundScene);
 	
 						var texIndex = self.textureMap1.addTexture(self.textures.grassSheet);
 						
+						var map;
+
 						// Ask the server to send us the tile data
 						ige.network.request('gameTiles', {}, function (commandName, data) {
 							console.log('gameTiles response', data);
 							
+							//tmx.parseFile('./assets/maps/map objecten.tmx', function(err, mapp){
+							//	map = mapp;
+							//});
+
 							// Paint the texture map based on the data sent from the server
 							var x, y, tileData;
-							for (x = 0; x < data.length; x++) {
-								for (y = 0; y < data[x].length; y++) {
+							
+							for (x = 0; x < 20; x++) {
+								for (y = 0; y < 10; y++) {
+									//tileData = tmx.tileAt(x, y);
 									tileData = data[x][y];
 									self.textureMap1.paintTile(x, y, tileData[0], tileData[1]);
 								}
