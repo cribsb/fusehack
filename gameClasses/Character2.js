@@ -168,6 +168,7 @@ var Character2 = IgeEntityBox2d.extend({
 		this.data('health', this.health);
 		console.log(this.data('health'));
 		ige.network.send('damageP1', damage);
+		console.log('rage');
 	},
 
 	update1: function (ctx, tickDelta) {
