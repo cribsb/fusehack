@@ -99,52 +99,7 @@ var Client = IgeClass.extend({
 							.drawBounds(false)
 							.mount(ige);
 						
-						// Create the texture map that will work as our "tile background"
-						// Create the texture maps
-						self.textureMap1 = new IgeTextureMap()
-							.depth(0)
-							.tileWidth(40)
-							.tileHeight(40)
-							//.drawGrid(3)
-							.drawMouse(true)
-							.translateTo(0, 0, 0)
-							.drawBounds(false)
-							.autoSection(10)
-							//.drawSectionBounds(true)
-							.isometricMounts(false)
-							//.translateTo(300, 300, 0)
-							.mount(self.backgroundScene);
-	
-						var texIndex = self.textureMap1.addTexture(self.textures.grassSheet);
 						
-						//var map;
-
-						// Ask the server to send us the tile data
-						ige.network.request('gameTiles', {}, function (commandName, data) {
-							console.log('gameTiles response', data);
-							
-							//loadScript('./gameClasses/tmx.js', function(){
-								//parseFile('./assets/maps/map objecten.tmx', function(err, mapp){
-								//map = mapp;
-							//});
-							//});
-							
-
-							// Paint the texture map based on the data sent from the server
-							var x, y, tileData;
-							
-							for (x = 0; x < 20; x++) {
-								for (y = 0; y < 10; y++) {
-									//tileData = tmx.tileAt(x, y);
-									tileData = data[x][y];
-									self.textureMap1.paintTile(x, y, tileData[0], tileData[1]);
-								}
-							}
-							
-							// Now set the texture map's cache data to dirty so it will
-							// be redrawn
-							self.textureMap1.cacheDirty(true);
-						});
 
 						// Ask the server to create an entity for us
 						ige.network.send('playerEntity');
@@ -153,6 +108,41 @@ var Client = IgeClass.extend({
 						// are created server-side and then streamed to the clients. If an entity
 						// is streamed to a client and the client doesn't have the entity in
 						// memory, the entity is automatically created. Woohoo!
+
+						// Load the Tiled map data and handle the return data
+						ige.addComponent(IgeTiledComponent)
+							.tiled.loadJson(tiled /* you can also use a url: 'maps/example.js'*/, function (layerArray, layersById) {
+								// The return data from the tiled component are two arguments,
+								// the first is an array of IgeTextureMap instances, each one
+								// representing one of the Tiled map's layers. The ID of each
+								// instance is the same as the name assigned to the Tiled
+								// layer it represents. The second argument contains the same
+								// instances but each instance is stored in a property that is
+								// named after the layer it represents so instead of having to
+								// loop the array you can simply pick the layer you want via
+								// the name assigned to it like layersById['layer name']
+
+								// We can add all our layers to our main scene by looping the
+								// array or we can pick a particular layer via the layersById
+								// object. Let's give an example:
+								var i;
+
+								for (i = 0; i < layerArray.length; i++) {
+									// Before we mount the layer we will adjust the size of
+									// the layer's tiles because Tiled calculates tile width
+									// based on the line from the left-most point to the
+									// right-most point of a tile whereas IGE calculates the
+									// tile width as the length of one side of the tile square.
+									layerArray[i]
+										.tileWidth(40)
+										.tileHeight(40)
+										.autoSection(20)
+										//.isometricMounts(false)
+										.drawBounds(false)
+										.drawBoundsData(false)
+										.mount(self.backgroundScene);
+								}
+							});
 					});
 				}
 			});

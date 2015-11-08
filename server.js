@@ -6,6 +6,13 @@ var Server = IgeClass.extend({
 		var self = this;
 		ige.timeScale(1);
 
+		// Add physics and setup physics world
+		ige.addComponent(IgeBox2dComponent)
+			.box2d.sleep(true)
+			.box2d.gravity(0, 0)
+			.box2d.createWorld()
+			.box2d.start();
+
 		// Define an object to hold references to our player entities
 		this.players = {};
 		
@@ -66,6 +73,16 @@ var Server = IgeClass.extend({
 							.id('foregroundScene')
 							.mount(self.mainScene);
 
+						self.objectLayer = new IgeTileMap2d()
+							.id('objectLayer')
+							.depth(1)
+							.isometricMounts(true)
+							.drawBounds(true)
+							.drawBoundsData(false)
+							.tileWidth(40)
+							.tileHeight(40)
+							.mount(self.mainScene);
+
 						// Create the main viewport and set the scene
 						// it will "look" at as the new scene1 we just
 						// created above
@@ -92,6 +109,38 @@ var Server = IgeClass.extend({
 								self.tileData[x][y] = [0, rand];
 							}
 						}
+
+						// Load the Tiled map data and handle the return data
+						ige.addComponent(IgeTiledComponent)
+							.tiled.loadJson(tiled, function (layerArray, layersById) {
+								var i, destTileX = - 1, destTileY = -1,
+									tileChecker = function (tileData, tileX, tileY) {
+										// If the map tile data is set, don't path along it
+										return !tileData;
+									};
+
+								// Create static box2d objects from the dirt layer
+								ige.box2d.staticsFromMap(layersById.DirtLayer);
+
+								// Create a path-finder
+								self.pathFinder = new IgePathFinder()
+									.neighbourLimit(1000); // Set a high limit because we are using a large map
+
+								// Create a bunch of AI characters that will walk around the screen
+								// using the path finder to find their way around. When they complete
+								// a path they will choose a new random destination and path to it.
+								// All the AI character code is in the gameClasses/CharacterAi.js
+								for (i = 0; i < 20; i++) {
+									// Pick a random tile for the entity to start on
+									while (destTileX < 0 || destTileY < 0 || !layersById.DirtLayer.map._mapData[destTileY] || !tileChecker(layersById.DirtLayer.map._mapData[destTileY][destTileX])) {
+										destTileX = Math.random() * 20 | 0;
+										destTileY = Math.random() * 20 | 0;
+									}
+
+									destTileX = -1;
+									destTileY = -1;
+								}
+							});
 					}
 				});
 			});
