@@ -521,7 +521,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "image":"tiles01.png",
+         "image":"../tiles01.png",
          "imageheight":512,
          "imagewidth":512,
          "margin":0,
@@ -553,7 +553,7 @@
         }, 
         {
          "firstgid":513,
-         "image":"..\/..\/..\/..\/Pictures\/river.png",
+         "image":"..\/river.png",
          "imageheight":32,
          "imagewidth":32,
          "margin":0,
