@@ -21,6 +21,9 @@ var Server = IgeClass.extend({
 
 		this.numPlayers = 0;
 
+		this.char1health = 100;
+		this.char2health = 100;
+
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
 
