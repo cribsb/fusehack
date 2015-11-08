@@ -7,7 +7,7 @@ var Server = IgeClass.extend({
 		ige.timeScale(1);
 
 		var port = process.env.PORT || 2000;
-
+		poort = port;
 		console.log(port);
 
 		// Define an object to hold references to our player entities
