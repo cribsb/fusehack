@@ -173,6 +173,8 @@ var Character2 = IgeEntityBox2d.extend({
 
 	update1: function (ctx, tickDelta) {
 
+		console.log('nog meer rage');
+
 		var mousePosAbs = this.mousePosAbsolute();
 		if (mousePosAbs.x < 100 && mousePosAbs.x > -100 && mousePosAbs.y < 100 && mousePosAbs.y > -100 ){
 			var muisInRange = true;
