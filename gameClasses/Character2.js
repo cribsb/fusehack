@@ -166,11 +166,10 @@ var Character2 = IgeEntityBox2d.extend({
 		this.health -= damage;
 		this.data('health', this.health);
 		console.log(this.data('health'));
+		ige.network.send('damageP2');
 	},
 
 	update: function (ctx, tickDelta) {
-
-		this.health = ige.server.char2health;
 
 		var mousePosAbs = this.mousePosAbsolute();
 		if (mousePosAbs.x < 100 && mousePosAbs.x > -100 && mousePosAbs.y < 100 && mousePosAbs.y > -100 ){

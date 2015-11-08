@@ -17,11 +17,23 @@ var ServerNetworkEvents = {
 			// Remove the player from the game
 			ige.server.players[clientId].destroy();
 
+			ige.server.numPlayers--;
+
 			// Remove the reference to the player entity
 			// so that we don't leak memory
 			delete ige.server.players[clientId];
 		}
 	},
+
+	_onDamageP1: function(damage) {
+		ige.server.char1health -= damage;
+		console.log(ige.server.char1health);
+	}
+
+	_onDamageP2: function(damage) {
+		ige.server.char2health -= damage;
+		console.log(ige.server.char2health);
+	}
 
 	_onPlayerEntity: function (data, clientId) {
 		if(ige.server.numPlayers == 0) {
