@@ -4,11 +4,22 @@ var Character = IgeEntity.extend({
 
 	init: function () {
 		var self = this;
+
+		this.strength = 30;
+		this.health = 100;
+		this.hit = 0;
+		this.klik = false;
+
 		IgeEntity.prototype.init.call(this);
 
 		// Set the co-ordinate system as isometric
 		this.isometric(true);
 		
+		this.mouseDown(function (event, control) {
+			klik = true;
+			console.log('oke');
+		});
+
 		if (ige.isServer) {
 			this.addComponent(IgeVelocityComponent);
 		}
@@ -128,7 +139,25 @@ var Character = IgeEntity.extend({
 		return this;
 	},
 
+	damagePlayer: function(damage){
+		this.health -= damage;
+	},
+
 	update: function (ctx, tickDelta) {
+
+		var mousePosAbs = this.mousePosAbsolute();
+		if (mousePosAbs.x <10.0 && mousePosAbs.x > -10 && mousePosAbs.y < 10 && mousePosAbs.y> -10 ){
+			var muisInRange = true;
+			//console.log(mousePosAbs);
+		};
+
+		if (muisInRange && klik){
+			hit = Math.random()*this.strength;
+			hit = Math.round(hit); 
+			this.damagePlayer(hit);
+			console.log("you've dealth " + hit + " damage!");
+		};
+
 		if (ige.isClient) {
 			// Set the current animation based on direction
 			var self = this,

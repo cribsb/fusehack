@@ -1,7 +1,7 @@
 var igeClientConfig = {
 	include: [
 		/* Your custom game JS scripts */
-		'./assets/maps/example.js',
+		'./assets/lavaland.js',
 		'./gameClasses/ClientNetworkEvents.js',
 		'./gameClasses/Character.js',
 		'./gameClasses/PlayerComponent.js',

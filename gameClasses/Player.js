@@ -34,18 +34,20 @@ var hit,
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
 
-		this.mouseDown(function (event, control) {
-    	// Mouse down with button
-   		 var klik = true;
+		this.mouseMove(function (event, control) {
+    		// Mouse down with button
+    		console.log('oek');
+   		 	var klik = true;
 
-   		 // You can ALSO stop propagation without the control object
-   		 // reference via the global reference:
-    	ige.input.stopPropagation();
+   		 	// You can ALSO stop propagation without the control object
+   		 	// reference via the global reference:
+    		//ige.input.stopPropagation();
 		});
 		var mousePosAbs = this.mousePosAbsolute();
 
 		if (mousePosAbs.x <10.0 && mousePosAbs.x > -10 && mousePosAbs.y < 10 && mousePosAbs.y> -10 ){
 			var muisInRange = true;
+			console.log(mousePosAbs);
 		};
 		entity.mouseOver(function (event, control) {
    		 // Mouse over 
@@ -61,8 +63,9 @@ var hit,
 	},
 
 	damagePayer: function(damage){
-health -= damage;
-},
+		health -= damage;
+		console.log('oke');
+	},
 
 	/**
 	 * Override the default IgeEntity class streamSectionData() method
@@ -100,11 +103,19 @@ health -= damage;
 	 * @param ctx The canvas context to render to.
 	 */
 	tick: function (ctx) {
-		if (klik && muisOpTegenstander && muisInRange){
-		hit = Math.random()*strength;
-		hit = Math.round(hit); 
-		damagePlayer(hit);
-		console.log("you've dealth " + hit + " damage!");
+		var mousePosAbs = this.mousePosAbsolute();
+		console.log('oke');
+		console.log(mousePosAbs.x);
+		if (mousePosAbs.x <10.0 && mousePosAbs.x > -10 && mousePosAbs.y < 10 && mousePosAbs.y> -10 ){
+			var muisInRange = true;
+			console.log(mousePosAbs);
+		};
+
+		if (muisInRange){
+			hit = Math.random()*strength;
+			hit = Math.round(hit); 
+			damagePlayer(hit);
+			console.log("you've dealth " + hit + " damage!");
 		};	
 		/* CEXCLUDE */
 		if (ige.isServer) {

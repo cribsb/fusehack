@@ -11,7 +11,8 @@ var Server = IgeClass.extend({
 			.box2d.sleep(true)
 			.box2d.gravity(0, 0)
 			.box2d.createWorld()
-			.box2d.start();
+			.box2d.start()
+			;
 
 		// Define an object to hold references to our player entities
 		this.players = {};
@@ -120,26 +121,13 @@ var Server = IgeClass.extend({
 									};
 
 								// Create static box2d objects from the dirt layer
-								ige.box2d.staticsFromMap(layersById.DirtLayer);
+								ige.box2d.staticsFromMap(layersById.Tilelaag1);
 
 								// Create a path-finder
 								self.pathFinder = new IgePathFinder()
 									.neighbourLimit(1000); // Set a high limit because we are using a large map
 
-								// Create a bunch of AI characters that will walk around the screen
-								// using the path finder to find their way around. When they complete
-								// a path they will choose a new random destination and path to it.
-								// All the AI character code is in the gameClasses/CharacterAi.js
-								for (i = 0; i < 20; i++) {
-									// Pick a random tile for the entity to start on
-									while (destTileX < 0 || destTileY < 0 || !layersById.DirtLayer.map._mapData[destTileY] || !tileChecker(layersById.DirtLayer.map._mapData[destTileY][destTileX])) {
-										destTileX = Math.random() * 20 | 0;
-										destTileY = Math.random() * 20 | 0;
-									}
-
-									destTileX = -1;
-									destTileY = -1;
-								}
+								
 							});
 					}
 				});

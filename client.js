@@ -99,7 +99,6 @@ var Client = IgeClass.extend({
 							.drawBounds(false)
 							.mount(ige);
 						
-						
 
 						// Ask the server to create an entity for us
 						ige.network.send('playerEntity');
@@ -134,8 +133,8 @@ var Client = IgeClass.extend({
 									// right-most point of a tile whereas IGE calculates the
 									// tile width as the length of one side of the tile square.
 									layerArray[i]
-										.tileWidth(40)
-										.tileHeight(40)
+										.tileWidth(32)
+										.tileHeight(32)
 										.autoSection(20)
 										//.isometricMounts(false)
 										.drawBounds(false)

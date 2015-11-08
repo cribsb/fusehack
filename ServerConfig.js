@@ -3,7 +3,7 @@ var config = {
 		{name: 'ServerNetworkEvents', path: './gameClasses/ServerNetworkEvents'},
 		{name: 'Character', path: './gameClasses/Character'},
 		{name: 'PlayerComponent', path: './gameClasses/PlayerComponent'},
-		{name: 'tiled', path: './assets/maps/example'}
+		{name: 'tiled', path: './assets/lavaland'}
 	]
 };
 
