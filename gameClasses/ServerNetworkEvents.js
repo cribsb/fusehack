@@ -28,6 +28,7 @@ var ServerNetworkEvents = {
 	_onDamageP1: function(damage) {
 		ige.server.char1health -= damage;
 		console.log(ige.server.char1health);
+		console.log('p1 dam');
 	},
 
 	_onDamageP2: function(damage) {
