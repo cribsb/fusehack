@@ -38,9 +38,24 @@ var Character = IgeEntityBox2d.extend({
 			var healthTex = new IgeTexture('./assets/textures/smartTextures/health.js');
 
 			
+			var cellSheet1 = new IgeCellSheet('./assets/textures/sprites/vx_chara02_c.png', 12, 8);
+			var cellSheet2 = new IgeCellSheet('./assets/textures/sprites/charchip01.png', 12, 8);
+			var cellSheet3 = new IgeCellSheet('./assets/textures/sprites/prettycoolheh.png', 12 8);
+			var cellSheet4 = new IgeCellSheet('./assets/textures/sprites/shinigami.png', 12, 8);
+			
+
+			var cell = Math.random() * 4
 
 			// Load the character texture file
-			this._characterTexture = new IgeCellSheet('./assets/textures/sprites/vx_chara02_c.png', 12, 8);
+			if(cell < 1){
+				this._characterTexture = cellSheet1;
+			} else if(cell < 2){
+				this._characterTexture = cellSheet2;
+			} else if(cell < 3){
+				this._characterTexture = cellSheet3;
+			} else {
+				this._characterTexture = cellSheet4;
+			};
 	
 			// Wait for the texture to load
 			this._characterTexture.on('loaded', function () {
