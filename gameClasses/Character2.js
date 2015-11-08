@@ -2,7 +2,7 @@
 var Character2 = IgeEntityBox2d.extend({
 	classId: 'Character2',
 
-	init1: function () {
+	init: function () {
 		var self = this;
 
 		this.strength = 30;
@@ -194,15 +194,11 @@ var Character2 = IgeEntityBox2d.extend({
 		return this;
 	},
 
-	damagePlayer1: function(damage){
+	damagePlayer: function(damage){
 		this.health -= damage;
-		this.data('health', this.health);
-		console.log(this.data('health'));
-		ige.network.send('damageP1', damage);
-		console.log('rage');
 	},
 
-	update1: function (ctx, tickDelta) {
+	update: function (ctx, tickDelta) {
 
 		console.log('nog meer rage');
 
@@ -285,7 +281,7 @@ var Character2 = IgeEntityBox2d.extend({
 		IgeEntityBox2d.prototype.update.call(this, ctx, tickDelta);
 	},
 
-	destroy1: function () {
+	destroy: function () {
 		// Destroy the texture object
 		if (this._characterTexture) {
 			this._characterTexture.destroy();
