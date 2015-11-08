@@ -69,6 +69,7 @@ var ServerNetworkEvents = {
 					.translateTo(128, 128, 0)
 					.mount(ige.server.foregroundScene);
 
+					console.log("p1 crea");
 				// Tell the client to track their player entity
 				ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
 			}

@@ -45,7 +45,7 @@ var Character2 = IgeEntityBox2d.extend({
 			// Wait for the texture to load
 			this._characterTexture.on('loaded', function () {
 				// Setting up the health bar
-			    var healthBarWidth = 64;
+			    var healthBarWidth = 32;
 			    self.healthBar = new IgeEntity()
 			      .texture(healthTex)
 			      .id(this.id() + '_healthBar')
