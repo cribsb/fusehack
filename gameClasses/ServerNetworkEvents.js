@@ -36,6 +36,15 @@ var ServerNetworkEvents = {
 		console.log(ige.server.char2health);
 	},
 
+	_onReloadMap: function() {
+		if(ige.server.mapNumber == 1){
+			ige.server.mapNumber = 2;
+		}
+		if(ige.server.mapNumber == 2){
+			ige.server.mapNumber = 1;
+		}
+	},
+
 	_onPlayerEntity: function (data, clientId) {
 		if(ige.server.numPlayers == 0) {
 			ige.server.numPlayers = 1;
@@ -104,7 +113,7 @@ var ServerNetworkEvents = {
 					.streamMode(1)
 					.translateTo(128, 128, 0)
 					.mount(ige.server.foregroundScene);
-					
+
 					console.log("p1 crea");
 
 				// Tell the client to track their player entity

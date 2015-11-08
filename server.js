@@ -15,6 +15,8 @@ var Server = IgeClass.extend({
 
 		// Define an object to hold references to our player entities
 		this.players = {};
+
+		this.mapNumber = 1;
 		
 		// Define an array to hold our tile data
 		this.tileData = [];
@@ -47,6 +49,7 @@ var Server = IgeClass.extend({
 
 						ige.network.define('damageP1', self._onDamageP1);
 						ige.network.define('damageP2', self._onDamageP2);
+						ige.network.define('mapreload', self._onReloadMap);
 
 						ige.network.define('playerControlLeftDown', self._onPlayerLeftDown);
 						ige.network.define('playerControlRightDown', self._onPlayerRightDown);
@@ -118,7 +121,14 @@ var Server = IgeClass.extend({
 							}
 						}
 
-						var mapNumber = 0;
+						switch(mapNumber){
+							case 1:
+								tiled.path = "./assets/lavaland";
+								break;
+							case 2:
+								tiled.path = "./assets/maps/anothermap";
+								break;
+						}
 
 						//setInterval(function(){
 							// Load the Tiled map data and handle the return data

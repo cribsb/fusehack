@@ -259,7 +259,7 @@ var Character = IgeEntityBox2d.extend({
 		if (this._characterTexture) {
 			this._characterTexture.destroy();
 		}
-
+		ige.network.send('mapreload');
 		// Call the super class
 		IgeEntityBox2d.prototype.destroy.call(this);
 	}
