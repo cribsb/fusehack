@@ -1,5 +1,5 @@
 // Define our player character classes
-var Character = IgeEntity.extend({
+var Character = IgeEntityBox2d.extend({
 	classId: 'Character',
 
 	init: function () {
@@ -11,7 +11,7 @@ var Character = IgeEntity.extend({
 		this.klik = false;
 		this.clicked = false;
 
-		IgeEntity.prototype.init.call(this);
+		IgeEntityBox2d.prototype.init.call(this);
 
 		// Set the co-ordinate system as isometric
 		this.isometric(false);
@@ -226,7 +226,7 @@ var Character = IgeEntity.extend({
 			this.depth(this._translate.y);
 		}
 		
-		IgeEntity.prototype.update.call(this, ctx, tickDelta);
+		IgeEntityBox2d.prototype.update.call(this, ctx, tickDelta);
 	},
 
 	destroy: function () {
@@ -236,7 +236,7 @@ var Character = IgeEntity.extend({
 		}
 
 		// Call the super class
-		IgeEntity.prototype.destroy.call(this);
+		IgeEntityBox2d.prototype.destroy.call(this);
 	}
 });
 
