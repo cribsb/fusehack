@@ -110,25 +110,29 @@ var Server = IgeClass.extend({
 							}
 						}
 
-						// Load the Tiled map data and handle the return data
-						ige.addComponent(IgeTiledComponent)
-							.tiled.loadJson(tiled, function (layerArray, layersById) {
-								var i, destTileX = - 1, destTileY = -1,
-									tileChecker = function (tileData, tileX, tileY) {
-										// If the map tile data is set, don't path along it
-										return !tileData;
-									};
+						var mapNumber = 0;
 
-								// Create static box2d objects from the dirt layer
-								ige.box2d.staticsFromMap(layersById.Tilelaag1);
-								ige.box2d.staticsFromMap(layersById.Tilelaag2);
+						setInterval(function(){
+							// Load the Tiled map data and handle the return data
+							ige.addComponent(IgeTiledComponent)
+								.tiled.loadJson(tiled, function (layerArray, layersById) {
+									var i, destTileX = - 1, destTileY = -1,
+										tileChecker = function (tileData, tileX, tileY) {
+											// If the map tile data is set, don't path along it
+											return !tileData;
+										};
 
-								// Create a path-finder
-								self.pathFinder = new IgePathFinder()
-									.neighbourLimit(1000); // Set a high limit because we are using a large map
+									// Create static box2d objects from the dirt layer
+									ige.box2d.staticsFromMap(layersById.Tilelaag1);
+									ige.box2d.staticsFromMap(layersById.Tilelaag2);
 
-								
-							});
+									// Create a path-finder
+									self.pathFinder = new IgePathFinder()
+										.neighbourLimit(1000); // Set a high limit because we are using a large map
+
+									
+								});
+							}, 3000);
 					}
 				});
 			});
