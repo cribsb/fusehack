@@ -151,7 +151,7 @@ var Character = IgeEntity.extend({
 			//console.log(mousePosAbs);
 		};
 
-		if (muisInRange && this.mouseDown()){
+		if (muisInRange && this.klik){
 			hit = Math.random()*this.strength;
 			hit = Math.round(hit); 
 			this.damagePlayer(hit);
