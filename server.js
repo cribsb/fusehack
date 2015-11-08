@@ -122,11 +122,11 @@ var Server = IgeClass.extend({
 						}
 
 						switch(this.mapNumber){
-							case 1:
+							case 2:
 								tiled.path = "./assets/lavaland";
 								foo();
 								break;
-							case 2:
+							case 1:
 								tiled.path = "./assets/maps/anothermap";
 								foo();
 								break;
