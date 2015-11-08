@@ -6,7 +6,7 @@ var Character = IgeEntityBox2d.extend({
 		var self = this;
 
 		this.strength = 30;
-		this.data('health', this.health);
+		
 		this.health = Math.random(70, 170);
 		this.hit = 0;
 		this.klik = false;
@@ -164,9 +164,6 @@ var Character = IgeEntityBox2d.extend({
 
 	damagePlayer: function(damage){
 		this.health -= damage;
-		this.data('health', this.health);
-		console.log(this.data('health'));
-		ige.network.send('damageP2', damage);
 	},
 
 	update: function (ctx, tickDelta) {
