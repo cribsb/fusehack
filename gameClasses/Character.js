@@ -171,6 +171,10 @@ var Character = IgeEntityBox2d.extend({
 
 	update: function (ctx, tickDelta) {
 
+		if(this.health <= 0){
+			this.destroy();
+		}
+
 		var mousePosAbs = this.mousePosAbsolute();
 		if (mousePosAbs.x < 100 && mousePosAbs.x > -100 && mousePosAbs.y < 100 && mousePosAbs.y > -100 ){
 			var muisInRange = true;
