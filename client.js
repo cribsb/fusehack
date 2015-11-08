@@ -127,7 +127,7 @@ var Client = IgeClass.extend({
 								//parseFile('./assets/maps/map objecten.tmx', function(err, mapp){
 								//map = mapp;
 							//});
-							});
+							//});
 							
 
 							// Paint the texture map based on the data sent from the server
