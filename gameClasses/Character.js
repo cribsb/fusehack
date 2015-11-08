@@ -44,9 +44,9 @@ var Character = IgeEntityBox2d.extend({
 	        var cellSheet4 = new IgeCellSheet('./assets/textures/sprites/shinigami.png', 12, 8);
 	        var cellSheet5 = new IgeCellSheet('./assets/textures/sprites/gallery_6129_38_17945.png', 12, 8);
 	        var cellSheet6 = new IgeCellSheet('./assets/textures/sprites/gallery_72313_146_12172.png', 12, 8);
-	        var cellSheet7 = new IgeCellSheet('./assets/textures/sprites/gallery_72313_146_21247.png', 12 8);
+	        var cellSheet7 = new IgeCellSheet('./assets/textures/sprites/gallery_72313_146_21247.png', 12, 8);
 	        var cellSheet8 = new IgeCellSheet('./assets/textures/sprites/guard01.png', 12, 8);
-	        var cellSheet9 = new IgeCellSheet('./assets/textures/sprites/guard02.png', 12 8);
+	        var cellSheet9 = new IgeCellSheet('./assets/textures/sprites/guard02.png', 12, 8);
 	        var cellSheet0 = new IgeCellSheet('./assets/textures/sprites/womanWalking.png', 12, 8);
 	      
 
