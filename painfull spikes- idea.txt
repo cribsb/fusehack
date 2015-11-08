@@ -1,0 +1,16 @@
+hurtPlayer: function(){
+	var Damage = 1;
+    this.health -= damage;
+}
+
+
+player.path.on('pointComplete',function() {
+    //every tile the player moves, check if it collides with the other object
+    //essentially if their bounding boxes are touching or overlapping they are colliding.
+    if(player.aabb().intersects(spike.aabb())) {
+        init(hurtPlayer, 100);
+//iedere 100 milisec voer hij de functie hurtPlayer uit
+    } 
+});
+
+
