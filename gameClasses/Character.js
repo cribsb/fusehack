@@ -18,7 +18,6 @@ var Character = IgeEntity.extend({
 		
 		this.mouseDown(function (event, control) {
 			this.klik = true;
-			this.clicked = true;
 			console.log('oke');
 		});
 
