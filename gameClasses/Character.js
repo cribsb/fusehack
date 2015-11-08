@@ -151,9 +151,9 @@ var Character = IgeEntity.extend({
 	update: function (ctx, tickDelta) {
 
 		var mousePosAbs = this.mousePosAbsolute();
+		console.log(mousePosAbs);
 		if (mousePosAbs.x < 100 && mousePosAbs.x > -100 && mousePosAbs.y < 100 && mousePosAbs.y > -100 ){
 			var muisInRange = true;
-			//console.log(mousePosAbs);
 		} else {
 			muisInRange = false;
 		};
