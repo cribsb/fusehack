@@ -1,6 +1,10 @@
 var Player = IgeEntity.extend({
 	classId: 'Player',
 
+var strength = 30,
+var health = 100,
+var hit,
+
 	init: function (id) {
 		IgeEntity.prototype.init.call(this);
 
@@ -29,7 +33,36 @@ var Player = IgeEntity.extend({
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
+
+		this.mouseDown(function (event, control) {
+    	// Mouse down with button
+   		 var klik = true;
+
+   		 // You can ALSO stop propagation without the control object
+   		 // reference via the global reference:
+    	ige.input.stopPropagation();
+		});
+		var mousePosAbs = this.mousePosAbsolute();
+
+		if (mousePosAbs.x <10.0 && mousePosAbs.x > -10 && mousePosAbs.y < 10 && mousePosAbs.y> -10 ){
+			var muisInRange = true;
+		};
+		entity.mouseOver(function (event, control) {
+   		 // Mouse over 
+    	var muisOpTegenstander = true;
+
+    	// Stop the event propagating further down the scenegraph
+    	control.stopPropagation();
+
+    	// You can ALSO stop propagation without the control object
+    	// reference via the global reference:
+    	ige.input.stopPropagation();
+		});
 	},
+
+	damagePayer: function(damage){
+health -= damage;
+},
 
 	/**
 	 * Override the default IgeEntity class streamSectionData() method
@@ -67,6 +100,12 @@ var Player = IgeEntity.extend({
 	 * @param ctx The canvas context to render to.
 	 */
 	tick: function (ctx) {
+		if (klik && muisOpTegenstander && muisInRange){
+		hit = Math.random()*strength;
+		hit = Math.round(hit); 
+		damagePlayer(hit);
+		console.log("you've dealth " + hit + " damage!");
+		};	
 		/* CEXCLUDE */
 		if (ige.isServer) {
 			if (this.controls.left) {
