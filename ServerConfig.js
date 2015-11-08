@@ -5,6 +5,7 @@ var config = {
 		{name: 'Character2', path: './gameClasses/Character2'},
 		{name: 'PlayerComponent', path: './gameClasses/PlayerComponent'},
 		{name: 'tiled', path: './assets/lavaland'},
+		{name: 'tiled2', path: './assets/maps/anothermap'},
 		{name: 'health', path: './assets/textures/smartTextures/health'}
 		//{name: 'map', path: './assets/anothermap'}
 	]

@@ -46,80 +46,42 @@ var ServerNetworkEvents = {
 	},
 
 	_onPlayerEntity: function (data, clientId) {
-		if(ige.server.numPlayers == 0) {
-			ige.server.numPlayers = 1;
-			if (!ige.server.players[clientId]) {
-				ige.server.players[clientId] = new Character(clientId)
-				.box2dBody({
-							type: 'dynamic',
-							linearDamping: 0.0,
-							angularDamping: 0.1,
-							allowSleep: true,
-							bullet: false,
-							gravitic: true,
-							fixedRotation: false,
-							fixtures: [{
-								density: 1.0,
-								friction: 0.5,
-								restitution: 0.2,
-								shape: {
-									type: 'circle',
-									data: {
-										// The position of the fixture relative to the body
-										x: 0,
-										y: 0,
-										radius: 16
-									}
+		ige.server.numPlayers = 1;
+		if (!ige.server.players[clientId]) {
+			ige.server.players[clientId] = new Character(clientId)
+			.box2dBody({
+						type: 'dynamic',
+						linearDamping: 0.0,
+						angularDamping: 0.1,
+						allowSleep: true,
+						bullet: false,
+						gravitic: true,
+						fixedRotation: false,
+						fixtures: [{
+							density: 1.0,
+							friction: 0.5,
+							restitution: 0.2,
+							shape: {
+								type: 'circle',
+								data: {
+									// The position of the fixture relative to the body
+									x: 0,
+									y: 0,
+									radius: 16
 								}
-							}]
-						})
-					.addComponent(PlayerComponent)
-					.streamMode(1)
-					.translateTo(128, 128, 0)
-					.mount(ige.server.foregroundScene);
+							}
+						}]
+					})
+				.addComponent(PlayerComponent)
+				.streamMode(1)
+				.translateTo(128, 128, 0)
+				.mount(ige.server.foregroundScene);
 
-					console.log("p1 crea");
-				// Tell the client to track their player entity
-				ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
-			}
-		} else if(ige.server.numPlayers == 1) {
-			ige.server.numPlayers = 2;
-			if (!ige.server.players[clientId]) {
-				ige.server.players[clientId] = new Character2(clientId)
-				.box2dBody({
-							type: 'dynamic',
-							linearDamping: 0.0,
-							angularDamping: 0.1,
-							allowSleep: true,
-							bullet: false,
-							gravitic: true,
-							fixedRotation: false,
-							fixtures: [{
-								density: 1.0,
-								friction: 0.5,
-								restitution: 0.2,
-								shape: {
-									type: 'circle',
-									data: {
-										// The position of the fixture relative to the body
-										x: 0,
-										y: 0,
-										radius: 16
-									}
-								}
-							}]
-						})
-					.addComponent(PlayerComponent)
-					.streamMode(1)
-					.translateTo(128, 128, 0)
-					.mount(ige.server.foregroundScene);
-
-					console.log("p1 crea");
-
-				// Tell the client to track their player entity
-				ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
+				console.log("p1 crea");
+			// Tell the client to track their player entity
+			ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
 		}
-		}
+	
 	},
 
 	_onPlayerLeftDown: function (data, clientId) {
