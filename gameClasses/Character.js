@@ -14,7 +14,7 @@ var Character = IgeEntity.extend({
 		IgeEntity.prototype.init.call(this);
 
 		// Set the co-ordinate system as isometric
-		this.isometric(true);
+		this.isometric(false);
 		
 		this.mouseDown(function (event, control) {
 			this.klik = true;
@@ -153,7 +153,6 @@ var Character = IgeEntity.extend({
 		var mousePosAbs = this.mousePosAbsolute();
 		if (mousePosAbs.x < 100 && mousePosAbs.x > -100 && mousePosAbs.y < 100 && mousePosAbs.y > -100 ){
 			var muisInRange = true;
-			console.log(mousePosAbs);
 		} else {
 			muisInRange = false;
 		};
