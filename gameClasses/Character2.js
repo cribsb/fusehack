@@ -251,7 +251,7 @@ var Character2 = IgeEntityBox2d.extend({
 			this.depth(this._translate.y);
 		}
 		
-		IgeEntityBox2d.prototype.update.call(this, ctx, tickDelta);
+		IgeEntityBox2d.prototype.update.call(this.update1, ctx, tickDelta);
 	},
 
 	destroy1: function () {
