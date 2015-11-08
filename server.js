@@ -121,18 +121,6 @@ var Server = IgeClass.extend({
 							}
 						}
 
-						switch(this.mapNumber){
-							case 2:
-								tiled.path = "./assets/lavaland";
-								foo();
-								break;
-							case 1:
-								tiled.path = "./assets/maps/anothermap";
-								foo();
-								break;
-						}
-
-						foo = function() {
 							// Load the Tiled map data and handle the return data
 							ige.addComponent(IgeTiledComponent)
 								.tiled.loadJson(tiled, function (layerArray, layersById) {
@@ -152,7 +140,6 @@ var Server = IgeClass.extend({
 
 									
 								});
-							}
 					}
 				});
 			});
