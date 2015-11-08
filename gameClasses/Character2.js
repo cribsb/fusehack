@@ -37,18 +37,12 @@ var Character2 = IgeEntityBox2d.extend({
 
 			
 			var cellSheet1 = new IgeCellSheet('./assets/textures/sprites/vx_chara02_c.png', 12, 8);
-			var cellSheet2 = new IgeCellSheet('./assets/textures/sprites/char110.png', 3, 4);
-			var cellSheet3 = new IgeCellSheet('./assets/textures/sprites/char112.png', 3, 4);
-			var cellSheet4 = new IgeCellSheet('./assets/textures/sprites/char113.png', 3, 4);
-			var cellSheet5 = new IgeCellSheet('./assets/textures/sprites/charchip01.png', 12, 8);
-			var cellSheet6 = new IgeCellSheet('./assets/textures/sprites/new-char01-1.png', 3, 4);
-			var cellSheet7 = new IgeCellSheet('./assets/textures/sprites/new-char02-2.png', 3, 4);
-			var cellSheet8 = new IgeCellSheet('./assets/textures/sprites/new-char03-3.png', 3, 4);
-			var cellSheet9 = new IgeCellSheet('./assets/textures/sprites/new-char04-4.png', 3, 4);
-			var cellSheet0 = new IgeCellSheet('./assets/textures/sprites/new-char05-5.png', 3, 4);
+			var cellSheet2 = new IgeCellSheet('./assets/textures/sprites/charchip01.png', 12, 8);
+			var cellSheet3 = new IgeCellSheet('./assets/textures/sprites/prettycoolheh.png', 12 8);
+			var cellSheet4 = new IgeCellSheet('./assets/textures/sprites/shinigami.png', 12, 8);
 			
 
-			var cell = Math.random() * 10
+			var cell = Math.random() * 4
 
 			// Load the character texture file
 			if(cell < 1){
@@ -57,20 +51,8 @@ var Character2 = IgeEntityBox2d.extend({
 				this._characterTexture = cellSheet2;
 			} else if(cell < 3){
 				this._characterTexture = cellSheet3;
-			} else if(cell < 4){
-				this._characterTexture = cellSheet4;
-			} else if(cell < 5){
-				this._characterTexture = cellSheet5;
-			} else if(cell < 6){
-				this._characterTexture = cellSheet6;
-			} else if(cell < 7){
-				this._characterTexture = cellSheet7;
-			} else if(cell < 8){
-				this._characterTexture = cellSheet8;
-			} else if(cell < 9){
-				this._characterTexture = cellSheet9;
 			} else {
-				this._characterTexture = cellSheet0;
+				this._characterTexture = cellSheet4;
 			};
 	
 			// Wait for the texture to load
