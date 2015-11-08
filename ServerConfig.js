@@ -1,7 +1,8 @@
 var config = {
 	include: [
 		{name: 'ServerNetworkEvents', path: './gameClasses/ServerNetworkEvents'},
-		{name: 'Ship', path: './gameClasses/Ship'}
+		{name: 'Character', path: './gameClasses/Character'},
+		{name: 'PlayerComponent', path: './gameClasses/PlayerComponent'}
 	]
 };
 

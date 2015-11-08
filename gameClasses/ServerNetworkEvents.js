@@ -13,19 +13,22 @@ var ServerNetworkEvents = {
 	},
 
 	_onPlayerDisconnect: function (clientId) {
-		// Remove the player from the game
-		ige.server.players[clientId].destroy();
+		if (ige.server.players[clientId]) {
+			// Remove the player from the game
+			ige.server.players[clientId].destroy();
 
-		// Remove the reference to the player entity
-		// so that we don't leak memory
-		delete ige.server.players[clientId];
+			// Remove the reference to the player entity
+			// so that we don't leak memory
+			delete ige.server.players[clientId];
+		}
 	},
 
 	_onPlayerEntity: function (data, clientId) {
 		if (!ige.server.players[clientId]) {
-			ige.server.players[clientId] = new Ship(clientId)
+			ige.server.players[clientId] = new Character(clientId)
+				.addComponent(PlayerComponent)
 				.streamMode(1)
-				.mount(ige.server.scene1);
+				.mount(ige.server.foregroundScene);
 
 			// Tell the client to track their player entity
 			ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
@@ -33,27 +36,35 @@ var ServerNetworkEvents = {
 	},
 
 	_onPlayerLeftDown: function (data, clientId) {
-		ige.server.players[clientId].controls.left = true;
+		ige.server.players[clientId].playerControl.controls.left = true;
 	},
 
 	_onPlayerLeftUp: function (data, clientId) {
-		ige.server.players[clientId].controls.left = false;
+		ige.server.players[clientId].playerControl.controls.left = false;
 	},
 
 	_onPlayerRightDown: function (data, clientId) {
-		ige.server.players[clientId].controls.right = true;
+		ige.server.players[clientId].playerControl.controls.right = true;
 	},
 
 	_onPlayerRightUp: function (data, clientId) {
-		ige.server.players[clientId].controls.right = false;
+		ige.server.players[clientId].playerControl.controls.right = false;
 	},
 
-	_onPlayerThrustDown: function (data, clientId) {
-		ige.server.players[clientId].controls.thrust = true;
+	_onPlayerUpDown: function (data, clientId) {
+		ige.server.players[clientId].playerControl.controls.up = true;
 	},
 
-	_onPlayerThrustUp: function (data, clientId) {
-		ige.server.players[clientId].controls.thrust = false;
+	_onPlayerUpUp: function (data, clientId) {
+		ige.server.players[clientId].playerControl.controls.up = false;
+	},
+	
+	_onPlayerDownDown: function (data, clientId) {
+		ige.server.players[clientId].playerControl.controls.down = true;
+	},
+
+	_onPlayerDownUp: function (data, clientId) {
+		ige.server.players[clientId].playerControl.controls.down = false;
 	}
 };
 
