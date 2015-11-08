@@ -64,4 +64,4 @@ var tiled = { "height":100,
  "width":100
 };
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = tiledExample1; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = tiled; }
