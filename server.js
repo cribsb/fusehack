@@ -4,7 +4,6 @@ var Server = IgeClass.extend({
 
 	init: function (options) {
 		var self = this;
-		ige.timeScale(1);
 
 		// Define an object to hold references to our player entities
 		this.players = {};
@@ -36,20 +35,15 @@ var Server = IgeClass.extend({
 
 						// Add the network stream component
 						ige.network.addComponent(IgeStreamComponent)
-							.stream.sendInterval(30) // Send a stream update once every 30 milliseconds
+							.stream.sendInterval(20) // Send a stream update once every 30 milliseconds
 							.stream.start(); // Start the stream
 
 						// Accept incoming network connections
 						ige.network.acceptConnections(true);
 
 						// Create the scene
-						self.mainScene = new IgeScene2d()
-							.id('mainScene');
-
-						// Create the scene
 						self.scene1 = new IgeScene2d()
-							.id('scene1')
-							.mount(self.mainScene);
+							.id('scene1');
 
 						// Create the main viewport and set the scene
 						// it will "look" at as the new scene1 we just
@@ -57,7 +51,7 @@ var Server = IgeClass.extend({
 						self.vp1 = new IgeViewport()
 							.id('vp1')
 							.autoSize(true)
-							.scene(self.mainScene)
+							.scene(self.scene1)
 							.drawBounds(true)
 							.mount(ige);
 					}

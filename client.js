@@ -2,8 +2,11 @@ var Client = IgeClass.extend({
 	classId: 'Client',
 
 	init: function () {
-		//ige.timeScale(0.1);
 		ige.showStats(1);
+
+		// Setup three.js interaction
+		ige.renderContext('three');
+		ige.addComponent(IgeThree);
 
 		// Load our textures
 		var self = this;
@@ -14,15 +17,19 @@ var Client = IgeClass.extend({
 		// Implement our game methods
 		this.implement(ClientNetworkEvents);
 
-		// Create the HTML canvas
-		ige.createFrontBuffer(true);
-
 		// Load the textures we want to use
 		this.textures = {
 			ship: new IgeTexture('./assets/PlayerTexture.js')
 		};
 
 		ige.on('texturesLoaded', function () {
+			// Create the HTML canvas
+			ige.createFrontBuffer(true);
+
+			// Setup the input system to use events
+			// from the three.js renderer canvas
+			ige.input.setupListeners(ige.three._canvas);
+
 			// Ask the engine to start
 			ige.start(function (success) {
 				// Check if the engine started successfully
@@ -43,21 +50,11 @@ var Client = IgeClass.extend({
 							// is created because of the incoming stream data
 							.stream.on('entityCreated', function (entity) {
 								self.log('Stream entity created with ID: ' + entity.id());
-
 							});
-
-						self.mainScene = new IgeScene2d()
-							.id('mainScene');
 
 						// Create the scene
 						self.scene1 = new IgeScene2d()
-							.id('scene1')
-							.mount(self.mainScene);
-
-						self.uiScene = new IgeScene2d()
-							.id('uiScene')
-							.ignoreCamera(true)
-							.mount(self.mainScene);
+							.id('scene1');
 
 						// Create the main viewport and set the scene
 						// it will "look" at as the new scene1 we just
@@ -65,9 +62,11 @@ var Client = IgeClass.extend({
 						self.vp1 = new IgeViewport()
 							.id('vp1')
 							.autoSize(true)
-							.scene(self.mainScene)
-							.drawBounds(false)
+							.scene(self.scene1)
+							.drawBounds(true)
 							.mount(ige);
+
+						self.vp1.camera.translateTo(0, 0, 500);
 
 						// Define our player controls
 						ige.input.mapAction('left', ige.input.key.left);
@@ -81,46 +80,6 @@ var Client = IgeClass.extend({
 						// are created server-side and then streamed to the clients. If an entity
 						// is streamed to a client and the client doesn't have the entity in
 						// memory, the entity is automatically created. Woohoo!
-
-						// Enable console logging of network messages but only show 10 of them and
-						// then stop logging them. This is a demo of how to help you debug network
-						// data messages.
-						ige.network.debugMax(10);
-						ige.network.debug(true);
-
-						// Create an IgeUiTimeStream entity that will allow us to "visualise" the
-						// timestream data being interpolated by the player entity
-						self.tsVis = new IgeUiTimeStream()
-							.height(140)
-							.width(400)
-							.top(0)
-							.center(0)
-							.mount(self.uiScene);
-
-						self.custom1 = {
-							name: 'Delta',
-							value: 0
-						};
-
-						self.custom2 = {
-							name: 'Data Delta',
-							value: 0
-						};
-
-						self.custom3 = {
-							name: 'Offset Delta',
-							value: 0
-						};
-
-						self.custom4 = {
-							name: 'Interpolate Time',
-							value: 0
-						};
-
-						ige.watchStart(self.custom1);
-						ige.watchStart(self.custom2);
-						ige.watchStart(self.custom3);
-						ige.watchStart(self.custom4);
 					});
 				}
 			});

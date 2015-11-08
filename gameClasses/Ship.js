@@ -1,16 +1,33 @@
-var Player = IgeEntity.extend({
-	classId: 'Player',
+var Ship = IgeEntity.extend({
+	classId: 'Ship',
 
 	init: function (id) {
 		IgeEntity.prototype.init.call(this);
 
-		this.id(id);
-
 		var self = this;
 
-		this.drawBounds(false);
+		if (id) {
+			this.id(id);
+		}
 
-		// Rotate to point upwards
+		this.scaleTo(4, 4, 4);
+
+		if (ige.isClient) {
+			this.material(new THREE.MeshFaceMaterial())
+				.model(modelSpaceFrigate6);
+		}
+
+		/*// Mount a turret to the ship entity
+		new IgeEntity()
+			.id(this.id() + '_turret')
+			.translateTo(0, -2.6, 1.8)
+			.rotateTo(0, 0, Math.radians(0))
+			.scaleTo(0.2, 0.2, 0.2)
+			.material(new THREE.MeshFaceMaterial())
+			.model(modelTurret)
+			.addBehaviour('mouseAim', TurretMouseAim)
+			.mount(self.obj[0]);*/
+
 		this.controls = {
 			left: false,
 			right: false,
@@ -19,12 +36,6 @@ var Player = IgeEntity.extend({
 
 		if (ige.isServer) {
 			this.addComponent(IgeVelocityComponent);
-		}
-
-		if (ige.isClient) {
-			self.texture(ige.client.textures.ship)
-			.width(20)
-			.height(20);
 		}
 
 		// Define the data sections that will be included in the stream
@@ -78,7 +89,7 @@ var Player = IgeEntity.extend({
 			}
 
 			if (this.controls.thrust) {
-				this.velocity.byAngleAndPower(this._rotate.z + Math.radians(-90), 0.1);
+				this.velocity.byAngleAndPower(this._rotate.z + Math.radians(-90), 0.6);
 			} else {
 				this.velocity.x(0);
 				this.velocity.y(0);
@@ -88,6 +99,7 @@ var Player = IgeEntity.extend({
 
 		if (ige.isClient) {
 			if (ige.input.actionState('left')) {
+
 				if (!this.controls.left) {
 					// Record the new state
 					this.controls.left = true;
@@ -147,4 +159,4 @@ var Player = IgeEntity.extend({
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Player; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Ship; }

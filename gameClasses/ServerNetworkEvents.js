@@ -13,19 +13,17 @@ var ServerNetworkEvents = {
 	},
 
 	_onPlayerDisconnect: function (clientId) {
-		if (ige.server.players[clientId]) {
-			// Remove the player from the game
-			ige.server.players[clientId].destroy();
+		// Remove the player from the game
+		ige.server.players[clientId].destroy();
 
-			// Remove the reference to the player entity
-			// so that we don't leak memory
-			delete ige.server.players[clientId];
-		}
+		// Remove the reference to the player entity
+		// so that we don't leak memory
+		delete ige.server.players[clientId];
 	},
 
 	_onPlayerEntity: function (data, clientId) {
 		if (!ige.server.players[clientId]) {
-			ige.server.players[clientId] = new Player(clientId)
+			ige.server.players[clientId] = new Ship(clientId)
 				.streamMode(1)
 				.mount(ige.server.scene1);
 
