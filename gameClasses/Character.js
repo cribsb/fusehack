@@ -20,6 +20,10 @@ var Character = IgeEntity.extend({
 			console.log('oke');
 		});
 
+		this.mouseUp(function (event, control){
+			this.klik = false;
+		});
+
 		if (ige.isServer) {
 			this.addComponent(IgeVelocityComponent);
 		}
