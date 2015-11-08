@@ -7,7 +7,7 @@ var Character = IgeEntityBox2d.extend({
 
 		this.strength = 30;
 		
-		this.health = Math.random(70, 170);
+		this.health = Math.random() * 100 + 70;
 		this.hit = 0;
 		this.klik = false;
 		this.clicked = false;
