@@ -28,12 +28,12 @@ var ServerNetworkEvents = {
 	_onDamageP1: function(damage) {
 		ige.server.char1health -= damage;
 		console.log(ige.server.char1health);
-	}
+	},
 
 	_onDamageP2: function(damage) {
 		ige.server.char2health -= damage;
 		console.log(ige.server.char2health);
-	}
+	},
 
 	_onPlayerEntity: function (data, clientId) {
 		if(ige.server.numPlayers == 0) {
