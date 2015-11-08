@@ -40,7 +40,7 @@ var Character = IgeEntityBox2d.extend({
 			
 			var cellSheet1 = new IgeCellSheet('./assets/textures/sprites/vx_chara02_c.png', 12, 8);
 	      	var cellSheet2 = new IgeCellSheet('./assets/textures/sprites/charchip01.png', 12, 8);
-	      	var cellSheet3 = new IgeCellSheet('./assets/textures/sprites/prettycoolheh.png', 12 8);
+	      	var cellSheet3 = new IgeCellSheet('./assets/textures/sprites/prettycoolheh.png', 12, 8);
 	        var cellSheet4 = new IgeCellSheet('./assets/textures/sprites/shinigami.png', 12, 8);
 	        var cellSheet5 = new IgeCellSheet('./assets/textures/sprites/gallery_6129_38_17945.png', 12, 8);
 	        var cellSheet6 = new IgeCellSheet('./assets/textures/sprites/gallery_72313_146_12172.png', 12, 8);
