@@ -7,7 +7,8 @@ var Client = IgeClass.extend({
 		ige.globalSmoothing(true);
 
 		// Load our textures
-		var self = this;
+		var self = this,
+			gameTexture = [];
 
 		// Enable networking
 		ige.addComponent(IgeNetIoComponent);
@@ -19,9 +20,7 @@ var Client = IgeClass.extend({
 		ige.createFrontBuffer(true);
 
 		// Load the textures we want to use
-		this.textures = {
-			grassSheet: new IgeCellSheet('./assets/textures/tiles/grassSheet.png', 4, 1)
-		};
+		gameTexture[0] = new IgeCellSheet('./assets/textures/tiles/tilea1 (1).png', 16, 12)
 
 		ige.on('texturesLoaded', function () {
 			// Ask the engine to start
@@ -66,6 +65,33 @@ var Client = IgeClass.extend({
 							.layer(2)
 							.ignoreCamera(true)
 							.mount(self.mainScene);
+
+						// Create the texture maps
+						self.textureMap1 = new IgeTextureMap()
+							.depth(0)
+							.tileWidth(32)
+							.tileHeight(32)
+							.gridSize(100, 100)
+							.drawGrid(true)
+							.drawMouse(true)
+							.translateTo(-1000, -600, 0)
+							//.drawBounds(true)
+							.autoSection(8)
+							//.drawSectionBounds(true)
+							.mount(self.mainScene);
+
+						self.textureMap1.addTexture(gameTexture[0]);
+
+						// Paint some awesome pavement tiles randomly selecting
+						// the "un-cracked" or "cracked" cell of gameTexture[2]
+						// which are cells 22 and 86 respectively
+						var textureCell, x, y, texIndex;
+						for (x = 0; x < 100; x++) {
+							for (y = 0; y < 100; y++) {
+								textureCell = (Math.random() * 4) < 2 ? 55 : 56;
+								self.textureMap1.paintTile(x, y, 0, textureCell);
+							}
+						}
 
 						// Create the main viewport and set the scene
 						// it will "look" at as the new scene1 we just
