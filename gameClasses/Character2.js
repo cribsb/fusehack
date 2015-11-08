@@ -2,7 +2,7 @@
 var Character2 = IgeEntityBox2d.extend({
 	classId: 'Character2',
 
-	init: function () {
+	init1: function () {
 		var self = this;
 
 		this.strength = 30;
@@ -170,7 +170,7 @@ var Character2 = IgeEntityBox2d.extend({
 		ige.network.send('damageP1', damage);
 	},
 
-	update: function (ctx, tickDelta) {
+	update1: function (ctx, tickDelta) {
 
 		var mousePosAbs = this.mousePosAbsolute();
 		if (mousePosAbs.x < 100 && mousePosAbs.x > -100 && mousePosAbs.y < 100 && mousePosAbs.y > -100 ){
@@ -251,7 +251,7 @@ var Character2 = IgeEntityBox2d.extend({
 		IgeEntityBox2d.prototype.update.call(this, ctx, tickDelta);
 	},
 
-	destroy: function () {
+	destroy1: function () {
 		// Destroy the texture object
 		if (this._characterTexture) {
 			this._characterTexture.destroy();
