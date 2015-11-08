@@ -16,7 +16,7 @@ var Character = IgeEntity.extend({
 		this.isometric(true);
 		
 		this.mouseDown(function (event, control) {
-			klik = true;
+			this.klik = true;
 			console.log('oke');
 		});
 
@@ -151,7 +151,7 @@ var Character = IgeEntity.extend({
 			//console.log(mousePosAbs);
 		};
 
-		if (muisInRange && klik){
+		if (muisInRange && this.mouseDown()){
 			hit = Math.random()*this.strength;
 			hit = Math.round(hit); 
 			this.damagePlayer(hit);
