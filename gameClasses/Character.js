@@ -164,6 +164,21 @@ var Character = IgeEntityBox2d.extend({
 			console.log("you've dealth " + hit + " damage!");
 			this.clicked = true;
 		};
+<<<<<<< HEAD
+=======
+		    // Setting up the health bar
+    var healthBarWidth = self.tileMap.tileWidth() * 1.5;
+    self.healthBar = new IgeEntity()
+      .texture(self.area.resourceManager.getSmartTexture('smart/health'))
+      .id(this.id() + '_healthBar')
+      .width(healthBarWidth)
+      .height(11)
+      .translateTo(-(healthBarWidth / 2), -40, 1)
+      .drawBounds(false)
+      .drawBoundsData(false)
+      .originTo(0.2, 0.2, 0.2)
+      .mount(self);
+>>>>>>> refs/remotes/origin/SANNEBOOOOOOOM
 
 		if (ige.isClient) {
 			// Set the current animation based on direction
