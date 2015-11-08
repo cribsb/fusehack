@@ -151,9 +151,11 @@ var Character = IgeEntity.extend({
 	update: function (ctx, tickDelta) {
 
 		var mousePosAbs = this.mousePosAbsolute();
-		if (mousePosAbs.x <100 && mousePosAbs.x > -100 && mousePosAbs.y < 100 && mousePosAbs.y> -100 ){
+		if (mousePosAbs.x < 100 && mousePosAbs.x > -100 && mousePosAbs.y < 100 && mousePosAbs.y > -100 ){
 			var muisInRange = true;
 			//console.log(mousePosAbs);
+		} else {
+			muisInRange = false;
 		};
 
 		if (muisInRange && this.klik && !this.clicked){
