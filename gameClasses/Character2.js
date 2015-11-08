@@ -163,7 +163,7 @@ var Character2 = IgeEntityBox2d.extend({
 		return this;
 	},
 
-	damagePlayer: function(damage){
+	damagePlayer1: function(damage){
 		this.health -= damage;
 		this.data('health', this.health);
 		console.log(this.data('health'));
@@ -182,7 +182,7 @@ var Character2 = IgeEntityBox2d.extend({
 		if (muisInRange && this.klik && !this.clicked){
 			hit = Math.random() * this.strength;
 			hit = Math.round(hit);
-			this.damagePlayer(hit);
+			this.damagePlayer1(hit);
 			console.log("you've dealth " + hit + " damage!");
 			this.clicked = true;
 		};
