@@ -59,7 +59,7 @@ var ServerNetworkEvents = {
 				// Tell the client to track their player entity
 				ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
 			}
-		} if(ige.server.numPlayers == 1) {
+		} else if(ige.server.numPlayers == 1) {
 			ige.server.numPlayers = 2;
 			if (!ige.server.players[clientId]) {
 				ige.server.players[clientId] = new Character2(clientId)
