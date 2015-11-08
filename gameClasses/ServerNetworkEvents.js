@@ -26,7 +26,7 @@ var ServerNetworkEvents = {
 	},
 
 	_onDestroyPlayer: function(clientId) {
-		
+		ige.server.players[clientId].destroy();
 	},
 
 	_onPlayerEntity: function (data, clientId) {
